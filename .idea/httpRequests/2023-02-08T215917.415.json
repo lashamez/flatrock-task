@@ -1,8 +1,0 @@
-{
-  "type": "about:blank",
-  "title": "Unsupported Media Type",
-  "status": 415,
-  "detail": "Content-Type '*/*;charset=UTF-8' is not supported.",
-  "instance": "/api/delivery/80",
-  "properties": null
-}
