@@ -1,0 +1,12 @@
+{
+  "id": 80,
+  "userId": 1,
+  "timestamp": "2023-02-08 21:38:01",
+  "orderEntries": [
+    {
+      "id": 89,
+      "productId": 1,
+      "quantity": 10
+    }
+  ]
+}

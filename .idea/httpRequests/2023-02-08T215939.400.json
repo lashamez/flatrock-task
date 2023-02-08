@@ -1,0 +1,14 @@
+{
+  "message": "Invalid ID",
+  "params": "delivery",
+  "timestamp": [
+    2023,
+    2,
+    8,
+    21,
+    59,
+    38,
+    878447815
+  ],
+  "status": "BAD_REQUEST"
+}

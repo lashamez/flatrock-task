@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+        Added the entity OrderEntry.
+    -->
+    <changeSet id="20230207114412-1" author="LK">
+        <createTable tableName="order">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="bigint"/>
+            <column name="order_date" type="datetime" defaultValueDate="${now}"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20230207114412-1-data" author="LK" context="faker">
+        <loadData
+                  file="liquibase/fake-data/order.csv"
+                  separator=";"
+                  tableName="order"
+                  usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="user_id" type="numeric"/>
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,10 @@
+spring:
+  jackson:
+    serialization:
+      indent-output: true
+  config:
+    import: classpath:common.yml
+
+server:
+  port: 8085
+
