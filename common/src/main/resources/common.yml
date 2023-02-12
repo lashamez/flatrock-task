@@ -37,6 +37,9 @@ spring:
           replicationFactor: 1
           auto-create-topics: true
           brokers: localhost:9092
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9093
 
   profiles:
     active: #spring.profiles.active#

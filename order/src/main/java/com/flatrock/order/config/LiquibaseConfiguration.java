@@ -21,12 +21,6 @@ public class LiquibaseConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(LiquibaseConfiguration.class);
 
-    private final Environment env;
-
-    public LiquibaseConfiguration(Environment env) {
-        this.env = env;
-    }
-
     @Bean
     public SpringLiquibase liquibase(
         @Qualifier("taskExecutor") Executor executor,
@@ -35,10 +29,16 @@ public class LiquibaseConfiguration {
         ObjectProvider<DataSource> dataSource,
         DataSourceProperties dataSourceProperties
     ) {
-        // If you don't want Liquibase to start asynchronously, substitute by this:
-        // SpringLiquibase liquibase = SpringLiquibaseUtil.createSpringLiquibase(liquibaseDataSource.getIfAvailable(), liquibaseProperties, dataSource.getIfUnique(), dataSourceProperties);
+        log.info("\n\n\n--------------------");
+        log.info("DATASOURCE URL: {}", dataSourceProperties.getUrl());
+        log.info("LIQUIBASE URL: {}", liquibaseProperties.getUrl());
+        log.info("DATASOURCE PWD: {}", dataSourceProperties.getPassword());
+        log.info("LIQUIBASE PWD: {}", liquibaseProperties.getPassword());
+        log.info("DATASOURCE USERNAME: {}", dataSourceProperties.getUsername());
+        log.info("LIQUIBASE USERNAME: {}", liquibaseProperties.getUser());
+        log.info("--------------------\n\n\n");
+
         SpringLiquibase liquibase = SpringLiquibaseUtil.createAsyncSpringLiquibase(
-            this.env,
             executor,
             liquibaseDataSource.getIfAvailable(),
             liquibaseProperties,

@@ -18,10 +18,11 @@ import java.util.Optional;
 @Service
 public class DeliveryService {
     private final DeliveryRepository deliveryRepository;
-
     private final NotificationMessageSender notificationMessageSender;
     private final OrderCanceledMessageSender orderCanceledMessageSender;
     private final MicroserviceRequest microserviceRequest;
+
+    private static final String ENTITY = "delivery";
 
     public DeliveryService(DeliveryRepository deliveryRepository, NotificationMessageSender notificationMessageSender, OrderCanceledMessageSender orderCanceledMessageSender, MicroserviceRequest microserviceRequest) {
         this.deliveryRepository = deliveryRepository;
@@ -34,7 +35,7 @@ public class DeliveryService {
         Optional<Delivery> deliveryByOrderId = deliveryRepository.findDeliveryByOrderId(delivery.getOrderId());
         return deliveryByOrderId.map(orderDelivery -> {
             if (orderDelivery.getOrderStatus() != OrderStatus.PENDING) {
-                throw new BadRequestAlertException("Order already finalized", "delivery", "orderfinalized");
+                throw new BadRequestAlertException("Order already finalized", ENTITY, "orderfinalized");
             }
             if (orderDelivery.getOrderStatus() == delivery.getOrderStatus()) {
                 throw new BadRequestAlertException("Order already has the same status, nothing to update", "delivery", "deliverynoupdate");
@@ -46,7 +47,7 @@ public class DeliveryService {
                 orderCanceledMessageSender.sendCancelOrderMessage(new CanceledOrderEvent(delivery.getOrderId()));
             }
             return updatedDelivery;
-        }).orElseThrow(() -> new BadRequestAlertException("Entity not found", "delivery", "idnotfound"));
+        }).orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY, "idnotfound"));
 
     }
 

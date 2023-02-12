@@ -2,8 +2,6 @@ package com.flatrock.delivery.config;
 
 import com.flatrock.common.liquibase.SpringLiquibaseUtil;
 import liquibase.integration.spring.SpringLiquibase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -19,8 +17,6 @@ import java.util.concurrent.Executor;
 @Configuration
 public class LiquibaseConfiguration {
 
-    private final Logger log = LoggerFactory.getLogger(LiquibaseConfiguration.class);
-
     private final Environment env;
 
     public LiquibaseConfiguration(Environment env) {
@@ -35,10 +31,7 @@ public class LiquibaseConfiguration {
         ObjectProvider<DataSource> dataSource,
         DataSourceProperties dataSourceProperties
     ) {
-        // If you don't want Liquibase to start asynchronously, substitute by this:
-        // SpringLiquibase liquibase = SpringLiquibaseUtil.createSpringLiquibase(liquibaseDataSource.getIfAvailable(), liquibaseProperties, dataSource.getIfUnique(), dataSourceProperties);
         SpringLiquibase liquibase = SpringLiquibaseUtil.createAsyncSpringLiquibase(
-            this.env,
             executor,
             liquibaseDataSource.getIfAvailable(),
             liquibaseProperties,

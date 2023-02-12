@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.liquibase.DataSourceClosingSpringLiquibase;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
-import org.springframework.core.env.Environment;
 
 import javax.sql.DataSource;
 import java.util.Objects;
@@ -31,7 +30,7 @@ public final class SpringLiquibaseUtil {
         }
     }
 
-    public static AsyncLiquibase createAsyncSpringLiquibase(Environment env, Executor executor, DataSource liquibaseDatasource, LiquibaseProperties liquibaseProperties, DataSource dataSource, DataSourceProperties dataSourceProperties) {
+    public static AsyncLiquibase createAsyncSpringLiquibase(Executor executor, DataSource liquibaseDatasource, LiquibaseProperties liquibaseProperties, DataSource dataSource, DataSourceProperties dataSourceProperties) {
         AsyncLiquibase liquibase = new AsyncLiquibase(executor);
         DataSource liquibaseDataSource = getDataSource(liquibaseDatasource, liquibaseProperties, dataSource);
         if (liquibaseDataSource != null) {
@@ -54,7 +53,7 @@ public final class SpringLiquibaseUtil {
 
     private static DataSource createNewDataSource(LiquibaseProperties liquibaseProperties, DataSourceProperties dataSourceProperties) {
         Objects.requireNonNull(liquibaseProperties);
-        Supplier supplier = liquibaseProperties::getUrl;
+        Supplier<String> supplier = liquibaseProperties::getUrl;
         Objects.requireNonNull(dataSourceProperties);
         String url = getProperty(supplier, dataSourceProperties::determineUrl);
         Objects.requireNonNull(liquibaseProperties);
@@ -69,6 +68,6 @@ public final class SpringLiquibaseUtil {
     }
 
     private static String getProperty(Supplier<String> property, Supplier<String> defaultValue) {
-        return (String)Optional.of(property).map(Supplier::get).orElseGet(defaultValue);
+        return Optional.of(property).map(Supplier::get).orElseGet(defaultValue);
     }
 }

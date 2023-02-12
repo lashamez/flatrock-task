@@ -15,7 +15,7 @@ public class BadRequestAlertException extends ResponseException implements Param
 
     private final String entityName;
     private final String errorKey;
-    private final HttpStatus status = HttpStatus.BAD_REQUEST;
+    private static final HttpStatus status = HttpStatus.BAD_REQUEST;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime timestamp = LocalDateTime.now();

@@ -25,7 +25,6 @@ public class MicroserviceRequest {
 
     public ResponseEntity<OrderSellersData> getSellerData(List<OrderItemDto> orderItemDtos){
         HttpEntity<List<OrderItemDto>> entity = new HttpEntity<>(orderItemDtos);
-        ResponseEntity<OrderSellersData> response = restTemplate.exchange(productServiceBaseUrl + "api/stocks/seller", HttpMethod.POST, entity, new ParameterizedTypeReference<>() {});
-        return response;
+        return restTemplate.exchange(productServiceBaseUrl + "api/stocks/seller", HttpMethod.POST, entity, new ParameterizedTypeReference<>() {});
     }
 }

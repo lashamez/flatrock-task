@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface ResponseUtil {
 
     static <X> ResponseEntity<X> wrapOrNotFound(Optional<X> maybeResponse) {
-        return maybeResponse.map((response) -> ResponseEntity.ok().body(response))
+        return maybeResponse.map(response -> ResponseEntity.ok().body(response))
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 

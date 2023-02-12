@@ -18,6 +18,7 @@ public class AsyncLiquibase extends DataSourceClosingSpringLiquibase {
         this.executor = executor;
     }
 
+    @Override
     public void afterPropertiesSet() {
 
         try {
@@ -33,21 +34,16 @@ public class AsyncLiquibase extends DataSourceClosingSpringLiquibase {
                     }
 
                 });
-            } catch (Throwable ex) {
-                if (connection != null) {
-                    try {
-                        connection.close();
-                    } catch (Throwable exc) {
-                        ex.addSuppressed(exc);
-                    }
+            } catch (Exception ex) {
+                try {
+                    connection.close();
+                } catch (Exception exc) {
+                    ex.addSuppressed(exc);
                 }
-
                 throw ex;
             }
 
-            if (connection != null) {
-                connection.close();
-            }
+            connection.close();
         } catch (SQLException ex) {
             this.logger.error("Liquibase could not start correctly, your database is NOT ready: {}", ex.getMessage(), ex);
         }

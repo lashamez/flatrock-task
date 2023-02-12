@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
-    private final Logger log = LoggerFactory.getLogger(SellerNotificationListener.class);
+    private final Logger log = LoggerFactory.getLogger(NotificationServiceImpl.class);
 
     @Override
     public void sendCustomerSms(String phone, OrderStatusEvent event) {

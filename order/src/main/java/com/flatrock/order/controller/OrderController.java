@@ -35,8 +35,6 @@ public class OrderController {
 
     private static final String ENTITY_NAME = "Order";
 
-    private String applicationName = "FlatRock";
-
     private final OrderRepository orderRepository;
 
     private final OrderService orderService;
@@ -63,13 +61,13 @@ public class OrderController {
     @PutMapping("/order/{id}")
     public ResponseEntity<Order> updateOrder(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody Order Order
-    ) throws URISyntaxException {
-        log.debug("REST request to update Order : {}, {}", id, Order);
-        if (Order.getId() == null) {
+        @Valid @RequestBody Order order
+    ) {
+        log.debug("REST request to update Order : {}, {}", id, order);
+        if (order.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, Order.getId())) {
+        if (!Objects.equals(id, order.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -77,7 +75,7 @@ public class OrderController {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Order result = orderRepository.save(Order);
+        Order result = orderRepository.save(order);
         return ResponseEntity
             .ok()
             .body(result);
@@ -92,8 +90,8 @@ public class OrderController {
     @GetMapping("/order/{id}")
     public ResponseEntity<Order> getOrder(@PathVariable Long id) {
         log.debug("REST request to get Order : {}", id);
-        Optional<Order> Order = orderRepository.findByIdWithEntries(id);
-        return ResponseUtil.wrapOrNotFound(Order);
+        Optional<Order> order = orderRepository.findByIdWithEntries(id);
+        return ResponseUtil.wrapOrNotFound(order);
     }
 
     @DeleteMapping("/order/{id}")

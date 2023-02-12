@@ -1,0 +1,100 @@
+version: '3.3'
+services:
+  user_app:
+    build:
+      context: user
+      dockerfile: ./user.Dockerfile
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_user?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+      - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_user?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+    ports:
+      - "8081:8081"
+    depends_on:
+      - flatrock-mysql
+  product_app:
+    build:
+      context: product
+      dockerfile: ./product.Dockerfile
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS=kafka:9092
+      - SPRING_DATASOURCE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+      - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+    ports:
+      - 127.0.0.1:8082:8082
+    depends_on:
+      - kafka
+      - flatrock-mysql
+  order_app:
+    build:
+      context: order
+      dockerfile: ./order.Dockerfile
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS=kafka:9092
+      - SPRING_DATASOURCE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_order?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+      - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_order?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+    ports:
+      - 127.0.0.1:8083:8083
+    depends_on:
+      - kafka
+      - flatrock-mysql
+  delivery_app:
+    build:
+      context: delivery
+      dockerfile: ./delivery.Dockerfile
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS=kafka:9092
+      - SPRING_DATASOURCE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+      - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+    ports:
+      - 127.0.0.1:8084:8084
+    depends_on:
+      - kafka
+      - flatrock-mysql
+  notification_app:
+    build:
+      context: notification
+      dockerfile: ./notification.Dockerfile
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS=kafka:9092
+    ports:
+      - 127.0.0.1:8085:8085
+    depends_on:
+      - kafka
+  kafka:
+    image: confluentinc/cp-kafka:7.1.1
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:9092:9092
+      - 127.0.0.1:9093:9093
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+    depends_on:
+      - zookeeper
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.1.1
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  flatrock-mysql:
+    image: mysql:8.0.29
+    volumes:
+      - ./docker/config/mysql:/etc/mysql/conf.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=pass
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "3306:3306"
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+

@@ -32,7 +32,7 @@ public class CustomerNotificationListener {
         log.debug("Kafka received customer notification :{}", json);
         OrderStatusEvent orderStatusEvent = objectMapper.readValue(json, new TypeReference<>() {});
         Long userId = orderStatusEvent.getUserId();
-        ContactDto customerContact = request.getUserContactById(userId);;
+        ContactDto customerContact = request.getUserContactById(userId);
         notificationService.sendCustomerSms(customerContact.getPhone(), orderStatusEvent);
     }
 

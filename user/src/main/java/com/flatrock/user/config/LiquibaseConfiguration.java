@@ -11,21 +11,12 @@ import org.springframework.boot.autoconfigure.liquibase.LiquibaseDataSource;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 
 import javax.sql.DataSource;
 import java.util.concurrent.Executor;
 
 @Configuration
 public class LiquibaseConfiguration {
-
-    private final Logger log = LoggerFactory.getLogger(LiquibaseConfiguration.class);
-
-    private final Environment env;
-
-    public LiquibaseConfiguration(Environment env) {
-        this.env = env;
-    }
 
     @Bean
     public SpringLiquibase liquibase(
@@ -36,7 +27,6 @@ public class LiquibaseConfiguration {
         DataSourceProperties dataSourceProperties
     ) {
         SpringLiquibase liquibase = SpringLiquibaseUtil.createAsyncSpringLiquibase(
-            this.env,
             executor,
             liquibaseDataSource.getIfAvailable(),
             liquibaseProperties,

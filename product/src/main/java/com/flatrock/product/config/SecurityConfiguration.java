@@ -21,6 +21,7 @@ import org.springframework.security.web.access.intercept.RequestAuthorizationCon
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 @EnableWebSecurity
@@ -79,7 +80,7 @@ public class SecurityConfiguration {
             .anyMatch(role -> role.equals(AuthoritiesConstants.ADMIN));
     }
     private boolean containsOrigin(RequestAuthorizationContext object) {
-        return properties.getCors().getAllowedOrigins()
+        return Objects.requireNonNull(properties.getCors().getAllowedOrigins())
             .contains(object.getRequest().getHeader(HttpHeaders.ORIGIN));
     }
 

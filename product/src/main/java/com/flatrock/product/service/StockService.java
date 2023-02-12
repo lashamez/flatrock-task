@@ -44,17 +44,6 @@ public class StockService {
     }
 
     /**
-     * Update a stock.
-     *
-     * @param stock the entity to save.
-     * @return the persisted entity.
-     */
-    public StockProduct update(StockProduct stock) {
-        log.debug("Request to save Stock : {}", stock);
-        return stockRepository.save(stock);
-    }
-
-    /**
      * Partially update a stock.
      *
      * @param stock the entity to update partially.
@@ -147,7 +136,7 @@ public class StockService {
         OrderSellersData sellerItemData = new OrderSellersData();
         Map<Long, List<StockProduct>> sellerProducts = new HashMap<>();
         stockProducts.forEach(stock -> sellerProducts.computeIfAbsent(stock.getProduct().getSellerId(),
-            (id) -> new ArrayList<>()).add(stock));
+            id -> new ArrayList<>()).add(stock));
         sellerProducts.forEach((key, value) -> {
             List<Long> clientProducts = value.stream().map(stock -> stock.getProduct().getId()).toList();
             sellerItemData.addSellerItemData(new SellerItemData(key, orderItems.stream()

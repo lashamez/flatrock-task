@@ -11,8 +11,6 @@ import com.flatrock.order.domain.OrderEntry;
 import com.flatrock.order.message.OrderCreatedProducer;
 import com.flatrock.order.repository.OrderRepository;
 import com.flatrock.order.rest.MicroserviceRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -28,8 +26,6 @@ import java.util.Objects;
 @Service
 @Transactional
 public class OrderService {
-
-    private final Logger log = LoggerFactory.getLogger(OrderService.class);
 
     private final RestTemplate restTemplate;
     private final OrderRepository orderRepository;
@@ -69,7 +65,7 @@ public class OrderService {
         List<ProductAvailabilityResponse> responses = Objects.requireNonNull(response.getBody());
         List<ProductAvailabilityResponse> unavailableProducts = responses.stream()
             .filter(product -> !product.isAvailable()).toList();
-        if (unavailableProducts.size() > 0) {
+        if (!unavailableProducts.isEmpty()) {
             throw new BadRequestAlertException("Products not available " + unavailableProducts, "product", "productnotinstock");
         }
         return responses.stream().mapToDouble(ProductAvailabilityResponse::getTotalPrice).sum();

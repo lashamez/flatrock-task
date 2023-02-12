@@ -18,9 +18,6 @@ import java.util.concurrent.Executor;
 
 @Configuration
 public class LiquibaseConfiguration {
-
-    private final Logger log = LoggerFactory.getLogger(LiquibaseConfiguration.class);
-
     private final Environment env;
 
     public LiquibaseConfiguration(Environment env) {
@@ -35,10 +32,7 @@ public class LiquibaseConfiguration {
         ObjectProvider<DataSource> dataSource,
         DataSourceProperties dataSourceProperties
     ) {
-        // If you don't want Liquibase to start asynchronously, substitute by this:
-        // SpringLiquibase liquibase = SpringLiquibaseUtil.createSpringLiquibase(liquibaseDataSource.getIfAvailable(), liquibaseProperties, dataSource.getIfUnique(), dataSourceProperties);
         SpringLiquibase liquibase = SpringLiquibaseUtil.createAsyncSpringLiquibase(
-            this.env,
             executor,
             liquibaseDataSource.getIfAvailable(),
             liquibaseProperties,
@@ -53,7 +47,7 @@ public class LiquibaseConfiguration {
         liquibase.setDatabaseChangeLogLockTable(liquibaseProperties.getDatabaseChangeLogLockTable());
         liquibase.setDatabaseChangeLogTable(liquibaseProperties.getDatabaseChangeLogTable());
         liquibase.setDropFirst(liquibaseProperties.isDropFirst());
-        liquibase.setLabels(liquibaseProperties.getLabelFilter());
+        liquibase.setLabelFilter(liquibaseProperties.getLabelFilter());
         liquibase.setChangeLogParameters(liquibaseProperties.getParameters());
         liquibase.setRollbackFile(liquibaseProperties.getRollbackFile());
         liquibase.setTestRollbackOnUpdate(liquibaseProperties.isTestRollbackOnUpdate());
