@@ -11,6 +11,7 @@ import com.flatrock.order.domain.OrderEntry;
 import com.flatrock.order.message.OrderCreatedProducer;
 import com.flatrock.order.repository.OrderRepository;
 import com.flatrock.order.rest.MicroserviceRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -26,7 +27,8 @@ import java.util.Objects;
 @Service
 @Transactional
 public class OrderService {
-
+    @Value("${application.services.product}")
+    private String productServiceBaseUrl;
     private final RestTemplate restTemplate;
     private final OrderRepository orderRepository;
 
@@ -61,7 +63,7 @@ public class OrderService {
             .map(entry -> new ProductAvailabilityRequest(entry.getProductId(), entry.getQuantity()))
             .toList();
         HttpEntity<List<ProductAvailabilityRequest>> entity = new HttpEntity<>(requests);
-        ResponseEntity<List<ProductAvailabilityResponse>> response = restTemplate.exchange("http://localhost:8081/api/stocks/check", HttpMethod.POST, entity, new ParameterizedTypeReference<>() {});
+        ResponseEntity<List<ProductAvailabilityResponse>> response = restTemplate.exchange(productServiceBaseUrl + "/api/stocks/check", HttpMethod.POST, entity, new ParameterizedTypeReference<>() {});
         List<ProductAvailabilityResponse> responses = Objects.requireNonNull(response.getBody());
         List<ProductAvailabilityResponse> unavailableProducts = responses.stream()
             .filter(product -> !product.isAvailable()).toList();

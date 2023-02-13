@@ -21,7 +21,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
     ports:
-      - 127.0.0.1:8082:8082
+      - "8082:8082"
     depends_on:
       - kafka
       - flatrock-mysql
@@ -34,8 +34,9 @@ services:
       - SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS=kafka:9092
       - SPRING_DATASOURCE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_order?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_order?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+      - product_app_url=http://product_app:8081/
     ports:
-      - 127.0.0.1:8083:8083
+      - "8083:8083"
     depends_on:
       - kafka
       - flatrock-mysql
@@ -49,7 +50,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
     ports:
-      - 127.0.0.1:8084:8084
+      - "8084:8084"
     depends_on:
       - kafka
       - flatrock-mysql
@@ -61,7 +62,7 @@ services:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS=kafka:9092
     ports:
-      - 127.0.0.1:8085:8085
+      - "8085:8085"
     depends_on:
       - kafka
   kafka:
