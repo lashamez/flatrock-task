@@ -1,5 +1,11 @@
 version: '3.3'
 services:
+  discovery:
+    build:
+      context: discovery
+      dockerfile: ./discovery.Dockerfile
+    ports:
+      - "8761:8761"
   user_app:
     build:
       context: user
@@ -7,10 +13,12 @@ services:
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_user?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_user?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+      - EUREKA_SERVER=http://discovery:8761/eureka
     ports:
       - "8081:8081"
     depends_on:
       - flatrock-mysql
+      - discovery
   product_app:
     build:
       context: product
@@ -18,28 +26,30 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS=kafka:9092
-      - SPRING_DATASOURCE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+      - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
     ports:
       - "8082:8082"
     depends_on:
       - kafka
       - flatrock-mysql
+      - discovery
   order_app:
     build:
       context: order
       dockerfile: ./order.Dockerfile
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS=kafka:9092
-      - SPRING_DATASOURCE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_order?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_order?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - product_app_url=http://product_app:8081/
+      - SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS=localhost:9093
+      - SPRING_DATASOURCE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_order?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+      - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_order?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+      - product_app_url=http://product_app:8082/
     ports:
       - "8083:8083"
     depends_on:
       - kafka
       - flatrock-mysql
+      - discovery
   delivery_app:
     build:
       context: delivery
@@ -47,13 +57,14 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS=kafka:9092
-      - SPRING_DATASOURCE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+      - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
     ports:
       - "8084:8084"
     depends_on:
       - kafka
       - flatrock-mysql
+      - discovery
   notification_app:
     build:
       context: notification
@@ -65,13 +76,14 @@ services:
       - "8085:8085"
     depends_on:
       - kafka
+      - discovery
   kafka:
     image: confluentinc/cp-kafka:7.1.1
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
-      - 127.0.0.1:9092:9092
-      - 127.0.0.1:9093:9093
+      - "9092:9092"
+      - "9093:9093"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181

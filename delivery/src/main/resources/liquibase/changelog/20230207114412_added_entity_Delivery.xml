@@ -18,5 +18,15 @@
             <column name="order_status" type="varchar(20)"/>
         </createTable>
     </changeSet>
-
+    <changeSet id="20230207114412-1-data" author="LK" context="faker">
+        <loadData
+            file="liquibase/fake-data/delivery.csv"
+            separator=";"
+            tableName="delivery"
+            usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="order_id" type="numeric"/>
+            <column name="order_status" type="varchar"/>
+        </loadData>
+    </changeSet>
 </databaseChangeLog>

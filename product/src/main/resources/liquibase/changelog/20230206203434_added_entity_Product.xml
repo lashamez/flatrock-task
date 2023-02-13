@@ -23,6 +23,9 @@
             <column name="category_id" type="bigint">
                 <constraints nullable="true" />
             </column>
+            <column name="seller_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
         </createTable>
     </changeSet>
 

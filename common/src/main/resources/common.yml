@@ -21,22 +21,20 @@ application:
     order-canceled: order-canceled-topic
     order-reversal: order-reversal-topic
   services:
-    user: "http://localhost:8090/"
-    product: "http://localhost:8081/"
-    delivery: "http://localhost:8082/"
-    order: "http://localhost:8083/"
-    notification: "http://localhost:8085/"
+    user: "http://flatrock_user:8081/"
+    product: "http://flatrock_product:8082/"
+    delivery: "http://flatrock_delivery:8084/"
+    order: "http://flatrock_order:8083/"
+    notification: "http://flatrock_notification:8085/"
 
 spring:
-  application:
-    name: flatrock
   cloud:
     stream:
       kafka:
         binder:
           replicationFactor: 1
           auto-create-topics: true
-          brokers: localhost:9092
+          brokers: localhost:9093
   kafka:
     consumer:
       bootstrap-servers: localhost:9093

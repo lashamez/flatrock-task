@@ -7,8 +7,8 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 public class MicroserviceRequest {
-    @Value("${application.services.user}")
-    private String userServiceBaseUrl;
+//    @Value("${application.services.user}")
+    private String userServiceBaseUrl = "http://user_service";
 
     private final RestTemplate restTemplate;
 

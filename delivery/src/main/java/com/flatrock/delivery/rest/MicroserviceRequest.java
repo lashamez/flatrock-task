@@ -7,8 +7,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 public class MicroserviceRequest {
-    @Value("${application.services.order}")
-    private String orderServiceBaseUrl;
+    private String orderServiceBaseUrl = "http://order_service";
 
     private final RestTemplate restTemplate;
 

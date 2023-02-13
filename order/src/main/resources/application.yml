@@ -19,7 +19,14 @@ spring:
     contexts: dev, faker
   config:
     import: classpath:common.yml
-
+  application:
+    name: order_service
 server:
   port: 8083
-
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
