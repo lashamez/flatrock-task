@@ -17,10 +17,7 @@ import java.util.concurrent.Executor;
 @Configuration
 public class LiquibaseConfiguration {
 
-    private final Environment env;
-
-    public LiquibaseConfiguration(Environment env) {
-        this.env = env;
+    public LiquibaseConfiguration() {
     }
 
     @Bean

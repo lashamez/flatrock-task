@@ -8,11 +8,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class JacksonConfiguration {
-
-    /**
-     * Support for Java date and time API.
-     * @return the corresponding Jackson module.
-     */
     @Bean
     public JavaTimeModule javaTimeModule() {
         return new JavaTimeModule();
@@ -23,7 +18,7 @@ public class JacksonConfiguration {
         return new Jdk8Module();
     }
 
-    @Bean("customObjectMapper")
+    @Bean
     public ObjectMapper objectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.findAndRegisterModules();

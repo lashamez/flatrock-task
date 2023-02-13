@@ -17,19 +17,6 @@ public final class SpringLiquibaseUtil {
     private SpringLiquibaseUtil() {
     }
 
-    public static SpringLiquibase createSpringLiquibase(DataSource liquibaseDatasource, LiquibaseProperties liquibaseProperties, DataSource dataSource, DataSourceProperties dataSourceProperties) {
-        DataSource liquibaseDataSource = getDataSource(liquibaseDatasource, liquibaseProperties, dataSource);
-        if (liquibaseDataSource != null) {
-            SpringLiquibase liquibase = new SpringLiquibase();
-            liquibase.setDataSource(liquibaseDataSource);
-            return liquibase;
-        } else {
-            SpringLiquibase liquibase = new DataSourceClosingSpringLiquibase();
-            liquibase.setDataSource(createNewDataSource(liquibaseProperties, dataSourceProperties));
-            return liquibase;
-        }
-    }
-
     public static AsyncLiquibase createAsyncSpringLiquibase(Executor executor, DataSource liquibaseDatasource, LiquibaseProperties liquibaseProperties, DataSource dataSource, DataSourceProperties dataSourceProperties) {
         AsyncLiquibase liquibase = new AsyncLiquibase(executor);
         DataSource liquibaseDataSource = getDataSource(liquibaseDatasource, liquibaseProperties, dataSource);
