@@ -31,7 +31,7 @@ public class OrderCanceledListener {
 
     @KafkaListener(topics = "${application.topic.order-canceled}", groupId = "notification")
     public void listen(String json) throws JsonProcessingException {
-        log.debug("Kafka received customer notification :{}", json);
+        log.debug("Kafka received order-canceled notification :{}", json);
         CanceledOrderEvent orderStatusEvent = objectMapper.readValue(json, new TypeReference<>() {});
         Long orderId = orderStatusEvent.getOrderId();
         List<OrderItemDto> orderItems = orderService.findOrderItemsById(orderId);

@@ -20,6 +20,7 @@ application:
     seller-notification: seller-notification-topic
     order-canceled: order-canceled-topic
     order-reversal: order-reversal-topic
+    reserve-failed: reserve-failed-topic
   services:
     user: "http://flatrock_user:8081/"
     product: "http://flatrock_product:8082/"

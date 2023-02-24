@@ -7,7 +7,9 @@ import com.flatrock.common.model.event.OrderCreatedEvent;
 import com.flatrock.product.service.StockService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,9 +21,15 @@ public class OrderCreatedListener {
 
     private final StockService stockService;
 
-    public OrderCreatedListener(ObjectMapper objectMapper, StockService stockService) {
+    private final KafkaTemplate<Object, Long> kafkaTemplate;
+
+    @Value("${application.topic.reserve-failed}")
+    private String reserveFailedTopic;
+
+    public OrderCreatedListener(ObjectMapper objectMapper, StockService stockService, KafkaTemplate<Object, Long> kafkaTemplate) {
         this.objectMapper = objectMapper;
         this.stockService = stockService;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
 
@@ -30,7 +38,12 @@ public class OrderCreatedListener {
         log.debug("Kafka received order creation notification :{}", orderCreated);
         log.debug("Updating reserved product quantities");
         OrderCreatedEvent orderCreatedEvent = objectMapper.readValue(orderCreated, new TypeReference<>() {});
-        stockService.reduceQuantities(orderCreatedEvent.getItems());
+
+        try {
+            stockService.reduceQuantities(orderCreatedEvent.getItems());
+        }catch (Exception e) {
+            kafkaTemplate.send(reserveFailedTopic, orderCreatedEvent.getOrderId());
+        }
     }
 
 }

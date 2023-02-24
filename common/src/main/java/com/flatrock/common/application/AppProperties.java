@@ -122,6 +122,8 @@ public class AppProperties {
         private String orderCanceled;
 
         private String orderReversal;
+
+        private String reserveFailed;
         public Topic() {
         }
 
@@ -163,6 +165,14 @@ public class AppProperties {
 
         public void setOrderReversal(String orderReversal) {
             this.orderReversal = orderReversal;
+        }
+
+        public String getReserveFailed() {
+            return reserveFailed;
+        }
+
+        public void setReserveFailed(String reserveFailed) {
+            this.reserveFailed = reserveFailed;
         }
     }
 

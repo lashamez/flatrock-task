@@ -15,7 +15,10 @@ services:
       - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_user?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
       - EUREKA_SERVER=http://discovery:8761/eureka
     ports:
-      - "8081:8081"
+      - "8081"
+    deploy:
+      replicas: 2
+      endpoint_mode: vip
     depends_on:
       - flatrock-mysql
       - discovery
@@ -28,12 +31,14 @@ services:
       - SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS=kafka:9092
       - SPRING_DATASOURCE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+      - EUREKA_SERVER=http://discovery:8761/eureka
     ports:
-      - "8082:8082"
+      - "8082"
     depends_on:
       - kafka
       - flatrock-mysql
       - discovery
+
   order_app:
     build:
       context: order
@@ -43,9 +48,9 @@ services:
       - SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS=localhost:9093
       - SPRING_DATASOURCE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_order?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_order?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
-      - product_app_url=http://product_app:8082/
+      - EUREKA_SERVER=http://discovery:8761/eureka
     ports:
-      - "8083:8083"
+      - "8083"
     depends_on:
       - kafka
       - flatrock-mysql
@@ -59,6 +64,8 @@ services:
       - SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS=kafka:9092
       - SPRING_DATASOURCE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+      - EUREKA_SERVER=http://discovery:8761/eureka
+
     ports:
       - "8084:8084"
     depends_on:
@@ -72,6 +79,7 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS=kafka:9092
+      - EUREKA_SERVER=http://discovery:8761/eureka
     ports:
       - "8085:8085"
     depends_on:
@@ -110,4 +118,3 @@ services:
     ports:
       - "3306:3306"
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
-

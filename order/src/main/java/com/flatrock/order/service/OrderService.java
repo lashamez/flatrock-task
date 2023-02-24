@@ -26,17 +26,15 @@ import java.util.Objects;
 @Transactional
 public class OrderService {
     private final Logger log = LoggerFactory.getLogger(OrderService.class);
-    private String productServiceBaseUrl = "http://PRODUCT_SERVICE";
-    private final RestTemplate restTemplate;
+
     private final OrderRepository orderRepository;
 
     private final OrderCreatedProducer orderProducer;
 
     private final MicroserviceRequest request;
 
-    public OrderService(OrderRepository orderRepository, RestTemplate restTemplate, OrderCreatedProducer orderProducer, MicroserviceRequest request) {
+    public OrderService(OrderRepository orderRepository, OrderCreatedProducer orderProducer, MicroserviceRequest request) {
         this.orderRepository = orderRepository;
-        this.restTemplate = restTemplate;
         this.orderProducer = orderProducer;
         this.request = request;
     }
@@ -81,5 +79,9 @@ public class OrderService {
     public ResponseEntity<OrderSellersData> getOrderSellerData(long orderId) {
         List<OrderItemDto> orderItemsById = findOrderItemsById(orderId);
         return request.getSellerData(orderItemsById);
+    }
+
+    public void deleteById(Long orderId) {
+        orderRepository.deleteById(orderId);
     }
 }

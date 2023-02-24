@@ -15,7 +15,9 @@ import org.springframework.context.annotation.ComponentScan;
 public class OrderApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OrderApplication.class, args);
+		SpringApplication app = new SpringApplication(OrderApplication.class);
+//		app.setLazyInitialization(true);
+		app.run(args);
 	}
 
 }
