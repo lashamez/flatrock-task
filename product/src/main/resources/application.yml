@@ -20,7 +20,7 @@ spring:
   config:
     import: classpath:common.yml
   application:
-    name: product_service
+    name: product-service
 
 server:
   port: 8082
@@ -28,7 +28,5 @@ eureka:
   client:
     serviceUrl:
       defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
-  instance:
-    instance-id: ${spring.application.instance_id:${random.value}}
 
 

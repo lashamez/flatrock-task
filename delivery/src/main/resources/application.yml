@@ -20,7 +20,7 @@ spring:
   config:
     import: classpath:common.yml
   application:
-    name: delivery_service
+    name: delivery-service
 
 server:
   port: 8084

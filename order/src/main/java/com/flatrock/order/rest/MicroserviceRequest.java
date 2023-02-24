@@ -19,6 +19,8 @@ import java.util.List;
 public class MicroserviceRequest {
     private final RestTemplate restTemplate;
     private final EurekaClient discoveryClient;
+    private InstanceInfo instanceInfo;
+    private final String productServiceName = "PRODUCT-SERVICE";
 
     public MicroserviceRequest(RestTemplate restTemplate, EurekaClient discoveryClient) {
         this.restTemplate = restTemplate;
@@ -38,7 +40,11 @@ public class MicroserviceRequest {
     }
 
     public String getProductServiceUrl() {
-        InstanceInfo instanceInfo = discoveryClient.getNextServerFromEureka("PRODUCT_SERVICE", false);
+        if (instanceInfo == null) {
+            synchronized (this) {
+                instanceInfo = discoveryClient.getNextServerFromEureka(productServiceName, false);
+            }
+        }
         return instanceInfo.getHomePageUrl();
     }
 

@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.4'
 services:
   discovery:
     build:
@@ -17,8 +17,7 @@ services:
     ports:
       - "8081"
     deploy:
-      replicas: 2
-      endpoint_mode: vip
+      replicas: 3
     depends_on:
       - flatrock-mysql
       - discovery
@@ -34,6 +33,8 @@ services:
       - EUREKA_SERVER=http://discovery:8761/eureka
     ports:
       - "8082"
+    deploy:
+      replicas: 3
     depends_on:
       - kafka
       - flatrock-mysql
@@ -45,12 +46,14 @@ services:
       dockerfile: ./order.Dockerfile
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS=localhost:9093
+      - SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS=kafka:9092
       - SPRING_DATASOURCE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_order?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_order?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
       - EUREKA_SERVER=http://discovery:8761/eureka
     ports:
       - "8083"
+    deploy:
+      replicas: 2
     depends_on:
       - kafka
       - flatrock-mysql
@@ -85,10 +88,19 @@ services:
     depends_on:
       - kafka
       - discovery
+  gateway_app:
+    build:
+      context: gateway
+      dockerfile: ./gateway.Dockerfile
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - EUREKA_SERVER=http://discovery:8761/eureka
+    ports:
+      - "5555:5555"
+    depends_on:
+      - discovery
   kafka:
     image: confluentinc/cp-kafka:7.1.1
-    # If you want to expose these ports outside your dev PC,
-    # remove the "127.0.0.1:" prefix
     ports:
       - "9092:9092"
       - "9093:9093"

@@ -20,7 +20,7 @@ spring:
   config:
     import: classpath:common.yml
   application:
-    name: order_service
+    name: order-service
 server:
   port: 8083
 eureka:

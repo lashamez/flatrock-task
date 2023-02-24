@@ -5,5 +5,16 @@ server:
   port: 8761
 eureka:
   client:
-    register-with-eureka: false
-    fetch-registry: false
+    registerWithEureka: false
+    fetchRegistry: false
+  server:
+    waitTimeInMsWhenSyncEmpty: 0
+    enableSelfPreservation: false
+    evictionIntervalTimerInMs: 5000
+    responseCacheAutoExpirationInSeconds: 0
+  instance:
+    hostname: localhost
+    preferIpAddress: true
+
+
+

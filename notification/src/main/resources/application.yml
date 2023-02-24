@@ -5,7 +5,7 @@ spring:
   config:
     import: classpath:common.yml
   application:
-    name: notification_service
+    name: notification-service
 server:
   port: 8085
 eureka:

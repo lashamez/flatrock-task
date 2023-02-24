@@ -42,6 +42,7 @@
         <module>delivery</module>
         <module>common</module>
         <module>discovery</module>
+        <module>gateway</module>
     </modules>
 
 </project>
