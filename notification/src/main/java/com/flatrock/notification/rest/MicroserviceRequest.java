@@ -21,7 +21,7 @@ public class MicroserviceRequest {
     }
 
     public ContactDto getUserContactById(Long id){
-        return restTemplate.getForObject(getUserServiceUrl() + "/api/admin/user/{id}/contact", ContactDto.class, id);
+        return restTemplate.getForObject(getUserServiceUrl() + "user//api/admin/user/{id}/contact", ContactDto.class, id);
     }
 
     public String getUserServiceUrl() {

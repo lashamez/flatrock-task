@@ -5,7 +5,19 @@ spring:
         - id: user
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/api/**
+            - Path=/user/api/**
+        - id: product
+          uri: lb://PRODUCT-SERVICE
+          predicates:
+            - Path=/product/api/**
+        - id: order
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/order/api/**
+        - id: delivery
+          uri: lb://DELIVERY-SERVICE
+          predicates:
+            - Path=/delivery/api/**
       discovery:
         locator:
           enabled: true

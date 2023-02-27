@@ -10,7 +10,7 @@
         Added the entity OrderEntry.
     -->
     <changeSet id="20230207114412-1" author="LK">
-        <createTable tableName="order">
+        <createTable tableName="orders">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
@@ -23,7 +23,7 @@
         <loadData
                   file="liquibase/fake-data/order.csv"
                   separator=";"
-                  tableName="order"
+                  tableName="orders"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="user_id" type="numeric"/>

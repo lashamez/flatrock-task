@@ -19,6 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     String USERS_BY_EMAIL_CACHE = "usersByEmail";
     Optional<User> findOneByEmailIgnoreCase(String email);
+    @Cacheable("users")
     Optional<User> findOneByLogin(String login);
 
     @EntityGraph(attributePaths = "authorities")
@@ -29,5 +30,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
     Optional<User> findOneWithAuthoritiesByEmailIgnoreCase(String email);
 
-    Page<User> findAllByIdNotNull(Pageable pageable);
 }

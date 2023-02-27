@@ -21,9 +21,14 @@ spring:
     import: classpath:common.yml
   application:
     name: product-service
-
+  data:
+    redis:
+      host: localhost
+      port: 6379
 server:
   port: 8082
+  servlet:
+    context-path: /product
 eureka:
   client:
     serviceUrl:

@@ -42,6 +42,8 @@
     <logger name="sun.rmi.transport" level="WARN"/>
     <logger name="Validator" level="INFO"/>
     <logger name="_org.springframework.web.servlet.HandlerMapping.Mappings" level="INFO"/>
+    <logger name="org.apache.kafka" level="INFO"/>
+    <logger name="com.netflix.discovery" level="INFO"/>
 
     <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
 

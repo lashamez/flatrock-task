@@ -11,6 +11,8 @@ import com.flatrock.product.domain.Product;
 import com.flatrock.product.domain.StockProduct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +51,7 @@ public class StockService {
      * @param stock the entity to update partially.
      * @return the persisted entity.
      */
+    @CachePut(value = "productById", key = "#stock.id")
     public Optional<StockProduct> partialUpdate(StockProduct stock) {
         log.debug("Request to partially update Stock : {}", stock);
 
@@ -81,20 +84,10 @@ public class StockService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
+    @Cacheable("productById")
     public Optional<StockProduct> findOneByProductId(Long id) {
         log.debug("Request to get Stock by Product: {}", id);
         return stockRepository.findOneByProductId(id);
-    }
-
-    public List<StockProduct> findByProductIds(List<Long> ids) {
-        log.debug("Request to get Stock by Product ids: {}", ids);
-        return stockRepository.findByProductIds(ids);
-    }
-
-    @Transactional(readOnly = true)
-    public Optional<StockProduct> findOneByStockId(Long id) {
-        log.debug("Request to get Stock : {}", id);
-        return stockRepository.findById(id);
     }
 
     @Transactional(readOnly = true)

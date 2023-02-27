@@ -23,7 +23,7 @@
             <column name="order_id" type="bigint">
                 <constraints nullable="false"
                              foreignKeyName="fk_order_entries_order_id"
-                             references="order(id)"/>
+                             references="orders(id)"/>
             </column>
         </createTable>
     </changeSet>

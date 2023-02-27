@@ -20,7 +20,7 @@ public class MicroserviceRequest {
     private final RestTemplate restTemplate;
     private final EurekaClient discoveryClient;
     private InstanceInfo instanceInfo;
-    private final String productServiceName = "PRODUCT-SERVICE";
+    private final static String productServiceName = "PRODUCT-SERVICE";
 
     public MicroserviceRequest(RestTemplate restTemplate, EurekaClient discoveryClient) {
         this.restTemplate = restTemplate;
@@ -29,13 +29,13 @@ public class MicroserviceRequest {
 
     public ResponseEntity<OrderSellersData> getSellerData(List<OrderItemDto> orderItemDtos) {
         HttpEntity<List<OrderItemDto>> entity = new HttpEntity<>(orderItemDtos);
-        return restTemplate.exchange(getProductServiceUrl() + "api/stocks/seller", HttpMethod.POST, entity, new ParameterizedTypeReference<>() {
+        return restTemplate.exchange(getProductServiceUrl() + "product/api/stocks/seller", HttpMethod.POST, entity, new ParameterizedTypeReference<>() {
         });
     }
 
     public ResponseEntity<List<ProductAvailabilityResponse>> validateProduct(List<ProductAvailabilityRequest> requests) {
         HttpEntity<List<ProductAvailabilityRequest>> entity = new HttpEntity<>(requests);
-        return restTemplate.exchange(getProductServiceUrl() + "api/stocks/check", HttpMethod.POST, entity, new ParameterizedTypeReference<>() {
+        return restTemplate.exchange(getProductServiceUrl() + "product/api/stocks/check", HttpMethod.POST, entity, new ParameterizedTypeReference<>() {
         });
     }
 

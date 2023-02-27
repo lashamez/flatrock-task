@@ -22,7 +22,7 @@ public class MicroserviceRequest {
     }
 
     public OrderSellersData getSellerData(Long id){
-        return restTemplate.getForObject(getOrderServiceUrl() + "/api/order/{id}/seller", OrderSellersData.class, id);
+        return restTemplate.getForObject(getOrderServiceUrl() + "order/api/order/{id}/seller", OrderSellersData.class, id);
     }
 
     public String getOrderServiceUrl() {

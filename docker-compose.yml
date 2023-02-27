@@ -14,6 +14,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_user?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_user?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
       - EUREKA_SERVER=http://discovery:8761/eureka
+      - SPRING_DATA_REDIS_HOST=redis
     ports:
       - "8081"
     deploy:
@@ -21,6 +22,7 @@ services:
     depends_on:
       - flatrock-mysql
       - discovery
+      - redis
   product_app:
     build:
       context: product
@@ -31,6 +33,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
       - EUREKA_SERVER=http://discovery:8761/eureka
+      - SPRING_DATA_REDIS_HOST=redis
     ports:
       - "8082"
     deploy:
@@ -39,6 +42,7 @@ services:
       - kafka
       - flatrock-mysql
       - discovery
+      - redis
 
   order_app:
     build:
@@ -130,3 +134,8 @@ services:
     ports:
       - "3306:3306"
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
