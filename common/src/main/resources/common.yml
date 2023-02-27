@@ -1,6 +1,6 @@
 application:
   cors:
-    allowed-origins: '${application.services.user},${application.services.product},${application.services.notification},${application.services.order},${application.services.delivery}'
+    allowed-origins: '*'
     allowed-methods: '*'
     allowed-headers: '*'
     allow-credentials: true
@@ -21,12 +21,6 @@ application:
     order-canceled: order-canceled-topic
     order-reversal: order-reversal-topic
     reserve-failed: reserve-failed-topic
-  services:
-    user: "http://flatrock_user:8081/"
-    product: "http://flatrock_product:8082/"
-    delivery: "http://flatrock_delivery:8084/"
-    order: "http://flatrock_order:8083/"
-    notification: "http://flatrock_notification:8085/"
 
 spring:
   cloud:

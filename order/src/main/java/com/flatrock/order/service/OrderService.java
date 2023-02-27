@@ -10,7 +10,7 @@ import com.flatrock.order.domain.Order;
 import com.flatrock.order.domain.OrderEntry;
 import com.flatrock.order.message.OrderCreatedProducer;
 import com.flatrock.order.repository.OrderRepository;
-import com.flatrock.order.rest.MicroserviceRequest;
+import com.flatrock.order.rest.ProductServiceClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -30,12 +30,12 @@ public class OrderService {
 
     private final OrderCreatedProducer orderProducer;
 
-    private final MicroserviceRequest request;
+    private final ProductServiceClient productServiceClient;
 
-    public OrderService(OrderRepository orderRepository, OrderCreatedProducer orderProducer, MicroserviceRequest request) {
+    public OrderService(OrderRepository orderRepository, OrderCreatedProducer orderProducer, ProductServiceClient productServiceClient) {
         this.orderRepository = orderRepository;
         this.orderProducer = orderProducer;
-        this.request = request;
+        this.productServiceClient = productServiceClient;
     }
 
     public Order validateAndSave(Order order) {
@@ -58,7 +58,7 @@ public class OrderService {
         List<ProductAvailabilityRequest> requests = orderEntries.stream()
             .map(entry -> new ProductAvailabilityRequest(entry.getProductId(), entry.getQuantity()))
             .toList();
-        ResponseEntity<List<ProductAvailabilityResponse>> response = request.validateProduct(requests);
+        ResponseEntity<List<ProductAvailabilityResponse>> response = productServiceClient.validateProduct(requests);
         List<ProductAvailabilityResponse> responses = Objects.requireNonNull(response.getBody());
         List<ProductAvailabilityResponse> unavailableProducts = responses.stream()
             .filter(product -> !product.isAvailable()).toList();
@@ -77,7 +77,7 @@ public class OrderService {
 
     public ResponseEntity<OrderSellersData> getOrderSellerData(long orderId) {
         List<OrderItemDto> orderItemsById = findOrderItemsById(orderId);
-        return request.getSellerData(orderItemsById);
+        return productServiceClient.getSellerData(orderItemsById);
     }
 
     public void deleteById(Long orderId) {

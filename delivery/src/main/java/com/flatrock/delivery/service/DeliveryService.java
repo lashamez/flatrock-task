@@ -10,7 +10,7 @@ import com.flatrock.delivery.domain.Delivery;
 import com.flatrock.delivery.message.NotificationMessageSender;
 import com.flatrock.delivery.message.OrderCanceledMessageSender;
 import com.flatrock.delivery.repository.DeliveryRepository;
-import com.flatrock.delivery.rest.MicroserviceRequest;
+import com.flatrock.delivery.rest.OrderServiceClient;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,15 +20,15 @@ public class DeliveryService {
     private final DeliveryRepository deliveryRepository;
     private final NotificationMessageSender notificationMessageSender;
     private final OrderCanceledMessageSender orderCanceledMessageSender;
-    private final MicroserviceRequest microserviceRequest;
+    private final OrderServiceClient orderServiceClient;
 
     private static final String ENTITY = "delivery";
 
-    public DeliveryService(DeliveryRepository deliveryRepository, NotificationMessageSender notificationMessageSender, OrderCanceledMessageSender orderCanceledMessageSender, MicroserviceRequest microserviceRequest) {
+    public DeliveryService(DeliveryRepository deliveryRepository, NotificationMessageSender notificationMessageSender, OrderCanceledMessageSender orderCanceledMessageSender, OrderServiceClient orderServiceClient) {
         this.deliveryRepository = deliveryRepository;
         this.notificationMessageSender = notificationMessageSender;
         this.orderCanceledMessageSender = orderCanceledMessageSender;
-        this.microserviceRequest = microserviceRequest;
+        this.orderServiceClient = orderServiceClient;
     }
 
     public Delivery updateDeliveryByOrderId(Delivery delivery) {
@@ -54,7 +54,7 @@ public class DeliveryService {
     private void sendNotifications(Delivery delivery) {
         Long orderId = delivery.getOrderId();
         Long customerId = delivery.getCustomerId();
-        OrderSellersData sellerData = microserviceRequest.getSellerData(orderId);
+        OrderSellersData sellerData = orderServiceClient.getSellerData(orderId);
         notificationMessageSender.sendCustomerNotification(new OrderStatusEvent(orderId, customerId, delivery.getOrderStatus(), null));
         sellerData.getSellerItems().forEach(seller -> notificationMessageSender.sendSellersNotification(new SellerItemData(seller.getSellerId(), seller.getOrderItems(), delivery.getOrderStatus())));
     }

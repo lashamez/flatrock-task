@@ -9,7 +9,7 @@ import com.flatrock.common.model.event.OrderCreatedEvent;
 import com.flatrock.common.model.event.OrderStatusEvent;
 import com.flatrock.delivery.domain.Delivery;
 import com.flatrock.delivery.repository.DeliveryRepository;
-import com.flatrock.delivery.rest.MicroserviceRequest;
+import com.flatrock.delivery.rest.OrderServiceClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -26,10 +26,10 @@ public class OrderCreatedListener {
 
     private final NotificationMessageSender notificationMessageSender;
 
-    private final MicroserviceRequest request;
+    private final OrderServiceClient request;
 
 
-    public OrderCreatedListener(ObjectMapper objectMapper, DeliveryRepository deliveryRepository, NotificationMessageSender notificationMessageSender, MicroserviceRequest request) {
+    public OrderCreatedListener(ObjectMapper objectMapper, DeliveryRepository deliveryRepository, NotificationMessageSender notificationMessageSender, OrderServiceClient request) {
         this.objectMapper = objectMapper;
         this.deliveryRepository = deliveryRepository;
         this.notificationMessageSender = notificationMessageSender;

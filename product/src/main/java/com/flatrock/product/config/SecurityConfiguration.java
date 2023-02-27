@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -63,22 +62,13 @@ public class SecurityConfiguration {
             .and()
             .authorizeHttpRequests()
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-            .requestMatchers("/api/**").access((authentication, object) -> new AuthorizationDecision(authentication.get().isAuthenticated() || containsOrigin(object)))
-            .requestMatchers("/api/admin/**").access((authentication, object) -> new AuthorizationDecision(isAdmin(authentication) || containsOrigin(object)))
+            .requestMatchers("/api/**").permitAll()
+            .requestMatchers("/api/admin/**").hasRole(AuthoritiesConstants.ADMIN)
             .and()
             .httpBasic()
             .and()
             .apply(securityConfigurerAdapter());
         return http.build();
-    }
-
-    private Boolean isAdmin(Supplier<Authentication> authentication) {
-        return authentication.get().getAuthorities().stream().map(GrantedAuthority::getAuthority)
-            .anyMatch(role -> role.equals(AuthoritiesConstants.ADMIN));
-    }
-    private boolean containsOrigin(RequestAuthorizationContext object) {
-        return Objects.requireNonNull(properties.getCors().getAllowedOrigins())
-            .contains(object.getRequest().getHeader(HttpHeaders.ORIGIN));
     }
 
     private JWTConfigurer securityConfigurerAdapter() {

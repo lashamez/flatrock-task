@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flatrock.common.model.ContactDto;
 import com.flatrock.common.model.SellerItemData;
-import com.flatrock.notification.rest.MicroserviceRequest;
+import com.flatrock.notification.rest.UserServiceClient;
 import com.flatrock.notification.service.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +18,9 @@ public class SellerNotificationListener {
     private final ObjectMapper objectMapper;
     private final NotificationService notificationService;
 
-    private final MicroserviceRequest request;
+    private final UserServiceClient request;
 
-    public SellerNotificationListener(ObjectMapper objectMapper, NotificationService notificationService, MicroserviceRequest request) {
+    public SellerNotificationListener(ObjectMapper objectMapper, NotificationService notificationService, UserServiceClient request) {
         this.objectMapper = objectMapper;
         this.notificationService = notificationService;
         this.request = request;

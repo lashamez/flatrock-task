@@ -57,15 +57,7 @@ public class WebConfigurer implements ServletContextInitializer {
 
     @Bean
     public RestTemplate restTemplate() {
-        RestTemplate restTemplate = new RestTemplate();
-        List<ClientHttpRequestInterceptor> interceptors
-            = restTemplate.getInterceptors();
-        if (CollectionUtils.isEmpty(interceptors)) {
-            interceptors = new ArrayList<>();
-        }
-        interceptors.add(new RestTemplateConfiguration(properties.getServices().getNotification()));
-        restTemplate.setInterceptors(interceptors);
-        return restTemplate;
+        return new RestTemplate();
     }
 }
 

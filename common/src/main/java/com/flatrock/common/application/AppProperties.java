@@ -15,9 +15,6 @@ public class AppProperties {
     private final ClientApp clientApp = new ClientApp();
     private final Topic topic = new Topic();
 
-    private final Services services = new Services();
-
-
     public AppProperties() {
     }
 
@@ -37,9 +34,6 @@ public class AppProperties {
         return topic;
     }
 
-    public Services getServices() {
-        return services;
-    }
 
     public static class Security {
         private final Authentication authentication = new Authentication();
@@ -176,56 +170,4 @@ public class AppProperties {
         }
     }
 
-    public static class Services {
-        private String user;
-        private String product;
-        private String notification;
-
-        private String delivery;
-
-        private String order;
-
-        public String getUser() {
-            return user;
-        }
-
-        public void setUser(String user) {
-            this.user = user;
-        }
-
-        public String getProduct() {
-            return product;
-        }
-
-        public void setProduct(String product) {
-            this.product = product;
-        }
-
-        public String getNotification() {
-            return notification;
-        }
-
-        public void setNotification(String notification) {
-            this.notification = notification;
-        }
-
-        public String getDelivery() {
-            return delivery;
-        }
-
-        public void setDelivery(String delivery) {
-            this.delivery = delivery;
-        }
-
-        public String getOrder() {
-            return order;
-        }
-
-        public void setOrder(String order) {
-            this.order = order;
-        }
-
-        public Services() {
-        }
-    }
 }

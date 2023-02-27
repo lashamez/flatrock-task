@@ -21,12 +21,13 @@ spring:
     import: classpath:common.yml
   application:
     name: delivery-service
+  kafka:
+    bootstrap-servers: localhost:9093
 
 server:
   port: 8084
   servlet:
     context-path: /delivery
-
 eureka:
   client:
     serviceUrl:
