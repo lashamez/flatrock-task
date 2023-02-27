@@ -12,6 +12,7 @@ import com.flatrock.user.service.dto.AdminUserDTO;
 import com.flatrock.user.domain.Authority;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -179,10 +180,10 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable("contactById")
     public ContactDto getUserContact(Long id) {
         return userRepository.findById(id).map(user -> new ContactDto(user.getId(), user.getPhone(), user.getEmail()))
             .orElseThrow(() -> new UsernameNotFoundException("User not found " + id));
-
     }
 
 }

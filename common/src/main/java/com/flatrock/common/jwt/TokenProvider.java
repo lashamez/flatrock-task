@@ -1,6 +1,7 @@
 package com.flatrock.common.jwt;
 
 import com.flatrock.common.application.AppProperties;
+import com.flatrock.common.security.ServiceEnum;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtParser;
@@ -23,9 +24,8 @@ import org.springframework.util.ObjectUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Component
@@ -42,6 +42,8 @@ public class TokenProvider {
     private final JwtParser jwtParser;
 
     private final long tokenValidityInMilliseconds;
+
+    private final Map<ServiceEnum, String> tokenCache = new ConcurrentHashMap<>();
 
     public TokenProvider(AppProperties properties) {
         byte[] keyBytes;
@@ -98,5 +100,14 @@ public class TokenProvider {
         }
 
         return false;
+    }
+
+    public String getToken(ServiceEnum serviceEnum) {
+        String token = tokenCache.computeIfAbsent(serviceEnum, key -> createToken(new MicroserviceAuthentication(key)));
+        if (!validateToken(token)) {
+            token = createToken(new MicroserviceAuthentication(serviceEnum));
+            tokenCache.put(serviceEnum, token);
+        }
+        return token;
     }
 }

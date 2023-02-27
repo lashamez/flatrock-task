@@ -21,6 +21,12 @@ application:
     order-canceled: order-canceled-topic
     order-reversal: order-reversal-topic
     reserve-failed: reserve-failed-topic
+  services:
+    user: "http://USER-SERVICE/"
+    product: "http://PRODUCT-SERVICE/"
+    delivery: "http://DELIVERY-SERVICE/"
+    order: "http://ORDER-SERVICE/"
+    notification: "http://NOTIFICATION-SERVICE/"
 
 spring:
   cloud:

@@ -1,25 +1,21 @@
 package com.flatrock.order.config;
 
-import com.flatrock.common.application.AppProperties;
-import com.flatrock.common.application.RestTemplateConfiguration;
+import com.flatrock.common.jwt.JwtInterceptor;
+import com.flatrock.common.jwt.TokenProvider;
+import com.flatrock.common.security.ServiceEnum;
+import com.flatrock.order.rest.ProductServiceClient;
+import feign.Contract;
+import feign.Feign;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
-import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.openfeign.support.SpringMvcContract;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Configuration
@@ -29,15 +25,18 @@ public class WebConfigurer implements ServletContextInitializer {
 
     private final Environment env;
 
-    private final AppProperties properties;
+    private final TokenProvider tokenProvider;
 
-    public WebConfigurer(Environment env, AppProperties properties) {
+    @Value("${application.services.product}")
+    private String productService;
+
+    public WebConfigurer(Environment env, TokenProvider tokenProvider) {
         this.env = env;
-        this.properties = properties;
+        this.tokenProvider = tokenProvider;
     }
 
     @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
+    public void onStartup(ServletContext servletContext) {
         if (env.getActiveProfiles().length != 0) {
             log.info("Web application configuration, using profiles: {}", (Object[]) env.getActiveProfiles());
         }
@@ -46,19 +45,20 @@ public class WebConfigurer implements ServletContextInitializer {
     }
 
     @Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = properties.getCors();
-        if (!CollectionUtils.isEmpty(config.getAllowedOrigins()) || !CollectionUtils.isEmpty(config.getAllowedOriginPatterns())) {
-            log.debug("Registering CORS filter");
-            source.registerCorsConfiguration("/api/**", config);
-        }
-        return new CorsFilter(source);
+    public JwtInterceptor jwtInterceptor() {
+        return new JwtInterceptor(tokenProvider, ServiceEnum.ORDER_SERVICE);
     }
 
     @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
+    public ProductServiceClient productServiceClient() {
+        return Feign.builder()
+                .contract(feignContract())
+                .requestInterceptor(jwtInterceptor()).target(ProductServiceClient.class, productService);
+    }
+
+    @Bean
+    public Contract feignContract() {
+        return new SpringMvcContract();
     }
 }
 

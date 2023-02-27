@@ -10,7 +10,6 @@ import com.flatrock.user.service.dto.AdminUserDTO;
 import com.flatrock.user.domain.User;
 import com.flatrock.user.repository.UserRepository;
 import com.flatrock.user.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -137,7 +136,7 @@ public class UserResource {
 
 
     @GetMapping("/user/{id}/contact")
-    public ContactDto getUserContact(@PathVariable Long id, HttpServletRequest request) {
+    public ContactDto getUserContact(@PathVariable Long id) {
         return userService.getUserContact(id);
     }
 }

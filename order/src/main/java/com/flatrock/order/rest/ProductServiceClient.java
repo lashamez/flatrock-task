@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient(name = "http://PRODUCT-SERVICE/product/")
+@FeignClient(name = "${application.services.product}")
 public interface ProductServiceClient {
-    @PostMapping("/api/stocks/check")
+    @PostMapping("/product/api/stocks/check")
     ResponseEntity<List<ProductAvailabilityResponse>> validateProduct(@RequestBody List<ProductAvailabilityRequest> requests);
 
-    @PostMapping("/api/stocks/seller")
+    @PostMapping("/product/api/stocks/seller")
     ResponseEntity<OrderSellersData> getSellerData(@RequestBody List<OrderItemDto> orderItemDtos);
 }

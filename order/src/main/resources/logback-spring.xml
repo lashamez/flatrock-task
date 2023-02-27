@@ -44,6 +44,7 @@
     <logger name="_org.springframework.web.servlet.HandlerMapping.Mappings" level="INFO"/>
     <logger name="org.apache.kafka" level="INFO"/>
     <logger name="com.netflix.discovery" level="INFO"/>
+    <logger name="com.flatrock.order" level="DEBUG"/>
 
     <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
 
