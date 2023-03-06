@@ -1,6 +1,6 @@
 application:
   cors:
-    allowed-origins: '*'
+    allowed-origins: 'http://localhost:3000'
     allowed-methods: '*'
     allowed-headers: '*'
     allow-credentials: true
@@ -35,10 +35,7 @@ spring:
         binder:
           replicationFactor: 1
           auto-create-topics: true
-          brokers: localhost:9093
-  kafka:
-    consumer:
-      bootstrap-servers: localhost:9093
+          brokers: ${KAFKA_SERVER:localhost:9093}
 
   profiles:
     active: #spring.profiles.active#

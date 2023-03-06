@@ -1,11 +1,10 @@
 package com.flatrock.product.service;
 
 import com.flatrock.common.errors.BadRequestAlertException;
-import com.flatrock.common.model.OrderItemDto;
-import com.flatrock.common.model.OrderSellersData;
-import com.flatrock.common.model.ProductAvailabilityRequest;
-import com.flatrock.common.model.ProductAvailabilityResponse;
-import com.flatrock.common.model.SellerItemData;
+import com.flatrock.common.model.*;
+import com.flatrock.product.domain.ESProduct;
+import com.flatrock.product.mapper.ProductMapper;
+import com.flatrock.product.repository.ProductESRepository;
 import com.flatrock.product.repository.StockRepository;
 import com.flatrock.product.domain.Product;
 import com.flatrock.product.domain.StockProduct;
@@ -13,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +31,11 @@ public class StockService {
 
     private final StockRepository stockRepository;
 
-    public StockService(StockRepository stockRepository) {
+    private final ProductESRepository productESRepository;
+
+    public StockService(StockRepository stockRepository, ProductESRepository productESRepository) {
         this.stockRepository = stockRepository;
+        this.productESRepository = productESRepository;
     }
 
     /**
@@ -52,7 +56,7 @@ public class StockService {
      * @return the persisted entity.
      */
     @CachePut(value = "productById", key = "#stock.id")
-    public Optional<StockProduct> partialUpdate(StockProduct stock) {
+    public Optional<ESProduct> partialUpdate(StockProduct stock) {
         log.debug("Request to partially update Stock : {}", stock);
 
         return stockRepository
@@ -64,7 +68,8 @@ public class StockService {
 
                 return existingStock;
             })
-            .map(stockRepository::save);
+            .map(stockRepository::save)
+            .map(ProductMapper::toEsProduct);
     }
 
     /**
@@ -73,9 +78,10 @@ public class StockService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<StockProduct> findAll() {
+    public PageResponse<ESProduct> findAll(Pageable pageable) {
         log.debug("Request to get all Stocks");
-        return stockRepository.findAll();
+        Page<ESProduct> products = productESRepository.findAll(pageable);
+        return new PageResponse<>(products.getContent(), products.getTotalElements(), products.getTotalPages());
     }
     /**
      * Get one stock by productId.
@@ -85,9 +91,9 @@ public class StockService {
      */
     @Transactional(readOnly = true)
     @Cacheable("productById")
-    public Optional<StockProduct> findOneByProductId(Long id) {
+    public Optional<ESProduct> findOneByProductId(Long id) {
         log.debug("Request to get Stock by Product: {}", id);
-        return stockRepository.findOneByProductId(id);
+        return productESRepository.findById(id);
     }
 
     @Transactional(readOnly = true)

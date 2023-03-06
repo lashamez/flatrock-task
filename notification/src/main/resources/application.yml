@@ -6,10 +6,11 @@ spring:
     import: classpath:common.yml
   application:
     name: notification-service
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVER:localhost:9093}
 server:
   port: 8085
 eureka:
   client:
     serviceUrl:
       defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
-

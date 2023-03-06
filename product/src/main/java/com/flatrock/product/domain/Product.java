@@ -1,5 +1,6 @@
 package com.flatrock.product.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +24,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @ToString
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -50,4 +52,11 @@ public class Product implements Serializable {
     @ToString.Exclude
     private Category category;
 
+    @Column(name = "short_description")
+    @NotNull
+    private String shortDescription;
+
+    @Column(name = "full_description")
+    @NotNull
+    private String fullDescription;
 }

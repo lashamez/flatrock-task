@@ -22,14 +22,10 @@ public class SecurityConfiguration {
 
     private final TokenProvider tokenProvider;
 
-    private final CorsFilter corsFilter;
-
     public SecurityConfiguration(
-        TokenProvider tokenProvider,
-        CorsFilter corsFilter
+        TokenProvider tokenProvider
     ) {
         this.tokenProvider = tokenProvider;
-        this.corsFilter = corsFilter;
     }
 
     @Bean
@@ -42,7 +38,6 @@ public class SecurityConfiguration {
         http
             .csrf()
             .disable()
-            .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling()
             .accessDeniedHandler(null)
             .and()

@@ -22,6 +22,13 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins: "http://localhost:3000"
+            allowed-methods: "*"
+            allowed-headers: "*"
+        add-to-simple-url-handler-mapping:
 
   application:
     name: gateway-service

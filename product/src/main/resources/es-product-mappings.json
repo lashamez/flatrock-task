@@ -1,0 +1,34 @@
+{
+  "properties": {
+    "id": {
+      "type": "long"
+    },
+    "autocomplete": {
+      "type": "search_as_you_type",
+      "analyzer": "autocomplete",
+      "search_analyzer": "autocomplete_search"
+    },
+    "name": {
+      "type": "text",
+      "copy_to": "autocomplete"
+    },
+    "price": {
+      "type": "double"
+    },
+    "sellerId": {
+      "type": "long"
+    },
+    "categoryName": {
+      "type": "text"
+    },
+    "shortDescription": {
+      "type": "text"
+    },
+    "fullDescription": {
+      "type": "text"
+    },
+    "quantity": {
+      "type": "integer"
+    }
+  }
+}

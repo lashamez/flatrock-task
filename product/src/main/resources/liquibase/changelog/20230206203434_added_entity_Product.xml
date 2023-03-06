@@ -26,6 +26,9 @@
             <column name="seller_id" type="bigint">
                 <constraints nullable="true" />
             </column>
+            <column name="short_description" type="text"/>
+            <column name="full_description" type="text"/>
+
         </createTable>
     </changeSet>
 
@@ -39,6 +42,10 @@
             <column name="id" type="numeric"/>
             <column name="name" type="string"/>
             <column name="price" type="numeric"/>
+            <column name="category_id" type="numeric"/>
+            <column name="seller_id" type="numeric"/>
+            <column name="short_description" type="string"/>
+            <column name="full_description" type="string"/>
         </loadData>
     </changeSet>
 </databaseChangeLog>

@@ -21,7 +21,7 @@ public class JacksonConfiguration {
     @Bean
     public ObjectMapper objectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.findAndRegisterModules();
+        objectMapper.registerModule(javaTimeModule());
         return objectMapper;
     }
 

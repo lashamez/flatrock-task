@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="create_review_table" author="LK">
+        <createTable tableName="review">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="author" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rating" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add_review_fk_constraint" author="LK">
+        <addForeignKeyConstraint baseTableName="review"
+                                 baseColumnNames="product_id"
+                                 constraintName="review_product_fk"
+                                 referencedTableName="product"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="review-fake-data" author="LK" context="faker">
+        <loadData
+                file="liquibase/fake-data/review.csv"
+                separator=";"
+                tableName="review"
+                encoding="UTF-8"
+                quotchar='"'
+                usePreparedStatements="true">
+
+            <column name="id" type="NUMERIC"/>
+            <column name="product_id" type="NUMERIC"/>
+            <column name="author" type="STRING"/>
+            <column name="content" type="STRING"/>
+            <column name="rating" type="NUMERIC"/>
+
+        </loadData>
+    </changeSet>
+
+
+</databaseChangeLog>

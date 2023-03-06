@@ -29,11 +29,12 @@ services:
       dockerfile: ./product.Dockerfile
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS=kafka:9092
+      - KAFKA_SERVER=kafka:9092
       - SPRING_DATASOURCE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
       - EUREKA_SERVER=http://discovery:8761/eureka
       - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
     ports:
       - "8082"
     deploy:
@@ -50,7 +51,7 @@ services:
       dockerfile: ./order.Dockerfile
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS=kafka:9092
+      - KAFKA_SERVER=kafka:9092
       - SPRING_DATASOURCE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_order?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_order?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
       - EUREKA_SERVER=http://discovery:8761/eureka
@@ -68,7 +69,7 @@ services:
       dockerfile: ./delivery.Dockerfile
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS=kafka:9092
+      - KAFKA_SERVER=kafka:9092
       - SPRING_DATASOURCE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://flatrock-mysql:3306/flatrock_product?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
       - EUREKA_SERVER=http://discovery:8761/eureka
@@ -85,7 +86,7 @@ services:
       dockerfile: ./notification.Dockerfile
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS=kafka:9092
+      - KAFKA_SERVER=kafka:9092
       - EUREKA_SERVER=http://discovery:8761/eureka
     ports:
       - "8085:8085"
@@ -139,3 +140,24 @@ services:
     ports:
       - "6379:6379"
     command: redis-server --appendonly yes
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.2
+    environment:
+      - node.name=elasticsearch
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+
+  kibana:
+      image: docker.elastic.co/kibana/kibana:8.6.2
+      ports:
+        - 5601:5601
+      environment:
+        ELASTICSEARCH_URL: http://elasticsearch:9200

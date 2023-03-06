@@ -1,0 +1,29 @@
+{
+  "analysis": {
+    "filter": {
+      "autocomplete_filter": {
+        "type": "edge_ngram",
+        "min_gram": 1,
+        "max_gram": 20
+      }
+    },
+    "analyzer": {
+      "autocomplete": {
+        "type": "custom",
+        "tokenizer": "whitespace",
+        "filter": [
+          "lowercase",
+          "shingle",
+          "autocomplete_filter"
+        ]
+      },
+      "autocomplete_search": {
+        "type": "custom",
+        "filter": [
+          "lowercase"
+        ],
+        "tokenizer": "standard"
+      }
+    }
+  }
+}

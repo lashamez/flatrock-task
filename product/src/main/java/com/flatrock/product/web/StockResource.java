@@ -1,11 +1,9 @@
 package com.flatrock.product.web;
 
 import com.flatrock.common.errors.BadRequestAlertException;
-import com.flatrock.common.model.OrderItemDto;
-import com.flatrock.common.model.OrderSellersData;
-import com.flatrock.common.model.ProductAvailabilityRequest;
-import com.flatrock.common.model.ProductAvailabilityResponse;
+import com.flatrock.common.model.*;
 import com.flatrock.common.util.ResponseUtil;
+import com.flatrock.product.domain.ESProduct;
 import com.flatrock.product.domain.StockProduct;
 import com.flatrock.product.repository.StockRepository;
 import com.flatrock.product.service.StockService;
@@ -13,14 +11,10 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -66,14 +60,14 @@ public class StockResource {
     /**
      * {@code PUT  /stocks/:id} : Updates an existing stock.
      *
-     * @param id the id of the stock to save.
+     * @param id    the id of the stock to save.
      * @param stock the stock to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated stock,
      * or with status {@code 400 (Bad Request)} if the stock is not valid,
      * or with status {@code 500 (Internal Server Error)} if the stock couldn't be updated.
      */
     @PutMapping(value = "/stocks/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<StockProduct> partialUpdateStock(
+    public ResponseEntity<ESProduct> partialUpdateStock(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody StockProduct stock
     ) {
@@ -89,7 +83,7 @@ public class StockResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<StockProduct> result = stockService.partialUpdate(stock);
+        Optional<ESProduct> result = stockService.partialUpdate(stock);
 
         return ResponseUtil.wrapOrNotFound(result);
     }
@@ -100,9 +94,10 @@ public class StockResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of stocks in body.
      */
     @GetMapping("/stocks")
-    public List<StockProduct> getAllStocks() {
+    public ResponseEntity<PageResponse<ESProduct>> getAllStocks(@RequestParam(defaultValue = "1") int page) {
         log.debug("REST request to get all Stocks");
-        return stockService.findAll();
+        Pageable pageable = PageRequest.of(page-1, 12);
+        return ResponseEntity.ok(stockService.findAll(pageable));
     }
 
     /**
@@ -112,9 +107,9 @@ public class StockResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the stock, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/stocks/{id}")
-    public ResponseEntity<StockProduct> getStock(@PathVariable Long id) {
+    public ResponseEntity<ESProduct> getStock(@PathVariable Long id) {
         log.debug("REST request to get Stock for Product: {}", id);
-        Optional<StockProduct> stock = stockService.findOneByProductId(id);
+        Optional<ESProduct> stock = stockService.findOneByProductId(id);
         return ResponseUtil.wrapOrNotFound(stock);
     }
 

@@ -22,7 +22,7 @@ spring:
   application:
     name: order-service
   kafka:
-    bootstrap-servers: localhost:9093
+    bootstrap-servers: ${KAFKA_SERVER:localhost:9093}
 server:
   port: 8083
   servlet:
