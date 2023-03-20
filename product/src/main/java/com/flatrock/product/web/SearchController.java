@@ -1,5 +1,6 @@
 package com.flatrock.product.web;
 
+import com.flatrock.product.domain.ESCategory;
 import com.flatrock.product.domain.ESProduct;
 import com.flatrock.product.service.SearchService;
 import org.slf4j.Logger;
@@ -28,4 +29,10 @@ public class SearchController {
         log.debug("REST request to get all Stocks");
         return ResponseEntity.ok(searchService.searchAutocomplete(query));
     }
+
+    @GetMapping("/category")
+    public ResponseEntity<List<ESCategory>> getCategories() throws IOException {
+        return ResponseEntity.ok(searchService.getCategories());
+    }
+
 }

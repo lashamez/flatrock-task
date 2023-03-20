@@ -19,7 +19,7 @@
       "type": "long"
     },
     "categoryName": {
-      "type": "text"
+      "type": "keyword"
     },
     "shortDescription": {
       "type": "text"

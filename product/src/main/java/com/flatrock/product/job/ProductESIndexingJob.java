@@ -27,7 +27,7 @@ public class ProductESIndexingJob {
     }
 
 
-    @Scheduled(fixedDelay = 30, timeUnit = TimeUnit.SECONDS)
+    @Scheduled(fixedDelay = 15, timeUnit = TimeUnit.MINUTES)
     public void indexProducts() {
         long start = System.currentTimeMillis();
         log.debug("Starting product indexing job");

@@ -94,10 +94,14 @@ public class StockResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of stocks in body.
      */
     @GetMapping("/stocks")
-    public ResponseEntity<PageResponse<ESProduct>> getAllStocks(@RequestParam(defaultValue = "1") int page) {
+    public ResponseEntity<PageResponse<ESProduct>> getAllStocks(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "") String category) {
         log.debug("REST request to get all Stocks");
         Pageable pageable = PageRequest.of(page-1, 12);
-        return ResponseEntity.ok(stockService.findAll(pageable));
+        if (category.isBlank()) {
+            return ResponseEntity.ok(stockService.findAll(pageable));
+        } else {
+            return ResponseEntity.ok(stockService.findCategoryProducts(pageable, category));
+        }
     }
 
     /**
