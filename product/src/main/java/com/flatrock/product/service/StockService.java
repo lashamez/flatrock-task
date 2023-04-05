@@ -79,14 +79,13 @@ public class StockService {
      */
     @Transactional(readOnly = true)
     public PageResponse<ESProduct> findAll(Pageable pageable) {
-        log.debug("Request to get all Stocks");
         Page<ESProduct> products = productESRepository.findAll(pageable);
         return new PageResponse<>(products.getContent(), products.getTotalElements(), products.getTotalPages());
     }
 
     @Transactional(readOnly = true)
     public PageResponse<ESProduct> findCategoryProducts(Pageable pageable, String category) {
-        log.debug("Request to get all Stocks");
+        log.debug("Request to get all Stocks for category :{}", category);
         Page<ESProduct> products = productESRepository.findByCategoryNameEncoded(category, pageable);
         return new PageResponse<>(products.getContent(), products.getTotalElements(), products.getTotalPages());
     }

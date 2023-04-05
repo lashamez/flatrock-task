@@ -43,6 +43,7 @@
         <module>common</module>
         <module>discovery</module>
         <module>gateway</module>
+        <module>recommendation</module>
     </modules>
 
 </project>

@@ -1,5 +1,6 @@
 package com.flatrock.product.repository;
 
+import co.elastic.clients.elasticsearch.core.SearchResponse;
 import com.flatrock.product.domain.ESProduct;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,4 +21,5 @@ public interface ProductESRepository extends ElasticsearchRepository<ESProduct, 
         String categoryName = URLDecoder.decode(encodedCategoryName, StandardCharsets.UTF_8);
         return findByCategoryName(categoryName, pageable);
     }
+
 }

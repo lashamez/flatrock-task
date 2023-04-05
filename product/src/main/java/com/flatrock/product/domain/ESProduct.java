@@ -9,6 +9,7 @@ import org.springframework.data.elasticsearch.annotations.Setting;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Builder
 @Document(indexName = "products")
@@ -28,7 +29,7 @@ public class ESProduct implements Serializable {
 
     private String name;
 
-    private Double price;
+    private BigDecimal price;
 
     private Long sellerId;
 
@@ -40,5 +41,7 @@ public class ESProduct implements Serializable {
 
     private String fullDescription;
 
-
+    public void setPrice(double price) {
+        this.price = BigDecimal.valueOf(price);
+    }
 }

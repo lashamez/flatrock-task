@@ -95,7 +95,7 @@ public class StockResource {
      */
     @GetMapping("/stocks")
     public ResponseEntity<PageResponse<ESProduct>> getAllStocks(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "") String category) {
-        log.debug("REST request to get all Stocks");
+        log.debug("REST request to get all Stocks, page: {}, category: {}", page, category);
         Pageable pageable = PageRequest.of(page-1, 12);
         if (category.isBlank()) {
             return ResponseEntity.ok(stockService.findAll(pageable));
