@@ -20,7 +20,9 @@ public class SellerNotificationListener {
 
     private final UserServiceClient request;
 
-    public SellerNotificationListener(ObjectMapper objectMapper, NotificationService notificationService, UserServiceClient request) {
+    public SellerNotificationListener(ObjectMapper objectMapper,
+                                      NotificationService notificationService,
+                                      UserServiceClient request) {
         this.objectMapper = objectMapper;
         this.notificationService = notificationService;
         this.request = request;
@@ -29,7 +31,7 @@ public class SellerNotificationListener {
     @KafkaListener(topics = "${application.topic.seller-notification}", groupId = "notification")
     public void listen(String json) throws JsonProcessingException {
         log.debug("Kafka received seller notification :{}", json);
-        SellerItemData sellerItemData = objectMapper.readValue(json, new TypeReference<>() {});
+        SellerItemData sellerItemData = objectMapper.readValue(json, new TypeReference<>() { });
         long userId = sellerItemData.getSellerId();
         ContactDto sellerContact = request.getUserContactById(userId);
         notificationService.sendSellerEmail(sellerContact.getEmail(), sellerItemData.getOrderItems());

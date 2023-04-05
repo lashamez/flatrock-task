@@ -32,7 +32,9 @@ public class OrderService {
 
     private final ProductServiceClient productServiceClient;
 
-    public OrderService(OrderRepository orderRepository, OrderCreatedProducer orderProducer, ProductServiceClient productServiceClient) {
+    public OrderService(OrderRepository orderRepository,
+                        OrderCreatedProducer orderProducer,
+                        ProductServiceClient productServiceClient) {
         this.orderRepository = orderRepository;
         this.orderProducer = orderProducer;
         this.productServiceClient = productServiceClient;
@@ -51,7 +53,8 @@ public class OrderService {
         List<OrderItemDto> productIds = order.getOrderEntries().stream()
             .map(entry -> new OrderItemDto(entry.getProductId(), entry.getQuantity()))
             .toList();
-        orderProducer.send(new OrderCreatedEvent(order.getId(), order.getUserId(), order.getTimestamp(), productIds, totalPrice));
+        orderProducer.send(new OrderCreatedEvent(order.getId(), order.getUserId(), order.getTimestamp(),
+                productIds, totalPrice));
     }
 
     private double validateProductAvailabilityAndGetTotal(List<OrderEntry> orderEntries) {
@@ -63,7 +66,8 @@ public class OrderService {
         List<ProductAvailabilityResponse> unavailableProducts = responses.stream()
             .filter(product -> !product.isAvailable()).toList();
         if (!unavailableProducts.isEmpty()) {
-            throw new BadRequestAlertException("Products not available " + unavailableProducts, "product", "productnotinstock");
+            throw new BadRequestAlertException("Products not available " + unavailableProducts,
+                    "product", "productnotinstock");
         }
         return responses.stream().mapToDouble(ProductAvailabilityResponse::getTotalPrice).sum();
     }
@@ -71,8 +75,9 @@ public class OrderService {
     public List<OrderItemDto> findOrderItemsById(Long orderId) {
         return orderRepository.findByIdWithEntries(orderId)
             .map(Order::getOrderEntries)
-            .map(entries -> entries.stream().map(entry -> new OrderItemDto(entry.getProductId(), entry.getQuantity())).toList())
-            .orElseThrow(() ->new BadRequestAlertException("Order not found", "order", "ordernotfound"));
+            .map(entries -> entries.stream().map(entry -> new OrderItemDto(entry.getProductId(),
+                    entry.getQuantity())).toList())
+            .orElseThrow(() -> new BadRequestAlertException("Order not found", "order", "ordernotfound"));
     }
 
     public ResponseEntity<OrderSellersData> getOrderSellerData(long orderId) {

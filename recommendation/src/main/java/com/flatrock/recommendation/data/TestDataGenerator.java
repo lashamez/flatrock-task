@@ -11,6 +11,10 @@ public class TestDataGenerator {
     private static final int MAX_PRODUCT_VIEWS = 10;
     private static final int MAX_PURCHASES = 5;
 
+    private TestDataGenerator() {
+
+    }
+
     public static void main(String[] args) {
         try {
             FileWriter writer = new FileWriter("test.csv");

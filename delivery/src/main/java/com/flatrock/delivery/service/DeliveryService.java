@@ -24,7 +24,10 @@ public class DeliveryService {
 
     private static final String ENTITY = "delivery";
 
-    public DeliveryService(DeliveryRepository deliveryRepository, NotificationMessageSender notificationMessageSender, OrderCanceledMessageSender orderCanceledMessageSender, OrderServiceClient orderServiceClient) {
+    public DeliveryService(DeliveryRepository deliveryRepository,
+                           NotificationMessageSender notificationMessageSender,
+                           OrderCanceledMessageSender orderCanceledMessageSender,
+                           OrderServiceClient orderServiceClient) {
         this.deliveryRepository = deliveryRepository;
         this.notificationMessageSender = notificationMessageSender;
         this.orderCanceledMessageSender = orderCanceledMessageSender;
@@ -38,7 +41,8 @@ public class DeliveryService {
                 throw new BadRequestAlertException("Order already finalized", ENTITY, "orderfinalized");
             }
             if (orderDelivery.getOrderStatus() == delivery.getOrderStatus()) {
-                throw new BadRequestAlertException("Order already has the same status, nothing to update", "delivery", "deliverynoupdate");
+                throw new BadRequestAlertException("Order already has the same status, nothing to update",
+                        "delivery", "deliverynoupdate");
             }
             orderDelivery.setOrderStatus(delivery.getOrderStatus());
             Delivery updatedDelivery = deliveryRepository.save(orderDelivery);
@@ -55,8 +59,10 @@ public class DeliveryService {
         Long orderId = delivery.getOrderId();
         Long customerId = delivery.getCustomerId();
         OrderSellersData sellerData = orderServiceClient.getSellerData(orderId);
-        notificationMessageSender.sendCustomerNotification(new OrderStatusEvent(orderId, customerId, delivery.getOrderStatus(), null));
-        sellerData.getSellerItems().forEach(seller -> notificationMessageSender.sendSellersNotification(new SellerItemData(seller.getSellerId(), seller.getOrderItems(), delivery.getOrderStatus())));
+        notificationMessageSender.sendCustomerNotification(
+                new OrderStatusEvent(orderId, customerId, delivery.getOrderStatus(), null));
+        sellerData.getSellerItems().forEach(seller -> notificationMessageSender.sendSellersNotification(
+                new SellerItemData(seller.getSellerId(), seller.getOrderItems(), delivery.getOrderStatus())));
     }
 
 }

@@ -6,7 +6,9 @@ import com.flatrock.product.domain.StockProduct;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class ProductMapper {
+public final class ProductMapper {
+    private ProductMapper() {
+    }
     public static ESProduct toEsProduct(StockProduct product) {
         return ESProduct.builder()
                 .id(product.getId())

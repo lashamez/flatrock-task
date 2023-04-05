@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+        "-//Puppy Crawl//DTD Suppressions 1.0//EN"
+        "https://checkstyle.org/dtds/suppressions_1_3.dtd">
+<suppressions>
+    <suppress files="GatewayApplication.java" checks="HideUtilityClassConstructor" />
+    <suppress files="DeliveryApplication.java" checks="HideUtilityClassConstructor" />
+    <suppress files="DiscoveryApplication.java" checks="HideUtilityClassConstructor" />
+    <suppress files="NotificationApplication.java" checks="HideUtilityClassConstructor" />
+    <suppress files="OrderApplication.java" checks="HideUtilityClassConstructor" />
+    <suppress files="ProductApplication.java" checks="HideUtilityClassConstructor" />
+    <suppress files="RecommendationApplication.java" checks="HideUtilityClassConstructor" />
+    <suppress files="UserApplication.java" checks="HideUtilityClassConstructor" />
+</suppressions>

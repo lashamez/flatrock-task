@@ -28,7 +28,7 @@ public class ProductReversalListener {
     @KafkaListener(topics = "${application.topic.order-reversal}", groupId = "product")
     public void listen(String json) throws JsonProcessingException {
         log.debug("Kafka received reversal-request :{}", json);
-        List<OrderItemDto> reversalProducts = objectMapper.readValue(json, new TypeReference<>() {});
+        List<OrderItemDto> reversalProducts = objectMapper.readValue(json, new TypeReference<>() { });
         reversalProducts.forEach(stockService::reversalQuantity);
     }
 

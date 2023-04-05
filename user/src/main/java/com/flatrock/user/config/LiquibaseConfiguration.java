@@ -2,8 +2,6 @@ package com.flatrock.user.config;
 
 import com.flatrock.common.liquibase.SpringLiquibaseUtil;
 import liquibase.integration.spring.SpringLiquibase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;

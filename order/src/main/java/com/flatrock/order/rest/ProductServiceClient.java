@@ -15,7 +15,8 @@ import java.util.List;
 @FeignClient(name = "${application.services.product}")
 public interface ProductServiceClient {
     @PostMapping("/product/api/stocks/check")
-    ResponseEntity<List<ProductAvailabilityResponse>> validateProduct(@RequestBody List<ProductAvailabilityRequest> requests);
+    ResponseEntity<List<ProductAvailabilityResponse>> validateProduct(@RequestBody
+                                                                      List<ProductAvailabilityRequest> requests);
 
     @PostMapping("/product/api/stocks/seller")
     ResponseEntity<OrderSellersData> getSellerData(@RequestBody List<OrderItemDto> orderItemDtos);

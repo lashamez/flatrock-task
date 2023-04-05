@@ -11,13 +11,12 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.flatrock.common.*", "com.flatrock.user.*"})
-@EnableConfigurationProperties({ LiquibaseProperties.class, AppProperties.class })
+@EnableConfigurationProperties({LiquibaseProperties.class, AppProperties.class})
 @EnableDiscoveryClient
 @EnableCaching
 public class UserApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(UserApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(UserApplication.class, args);
+    }
 
 }

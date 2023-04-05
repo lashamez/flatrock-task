@@ -15,5 +15,5 @@ public final class AuthoritiesConstants {
 
     public static final String INTERNAL = "ROLE_INTERNAL";
 
-    private AuthoritiesConstants() {}
+    private AuthoritiesConstants() { }
 }

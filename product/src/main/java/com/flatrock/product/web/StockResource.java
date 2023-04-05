@@ -1,7 +1,11 @@
 package com.flatrock.product.web;
 
 import com.flatrock.common.errors.BadRequestAlertException;
-import com.flatrock.common.model.*;
+import com.flatrock.common.model.OrderItemDto;
+import com.flatrock.common.model.OrderSellersData;
+import com.flatrock.common.model.PageResponse;
+import com.flatrock.common.model.ProductAvailabilityRequest;
+import com.flatrock.common.model.ProductAvailabilityResponse;
 import com.flatrock.common.util.ResponseUtil;
 import com.flatrock.product.domain.ESProduct;
 import com.flatrock.product.domain.StockProduct;
@@ -14,7 +18,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -43,7 +54,8 @@ public class StockResource {
      * {@code POST  /stocks} : Create a new stock.
      *
      * @param stock the stock to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new stock, or with status {@code 400 (Bad Request)} if the stock has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new stock,
+     * or with status {@code 400 (Bad Request)} if the stock has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/stocks")
@@ -94,9 +106,10 @@ public class StockResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of stocks in body.
      */
     @GetMapping("/stocks")
-    public ResponseEntity<PageResponse<ESProduct>> getAllStocks(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "") String category) {
+    public ResponseEntity<PageResponse<ESProduct>> getAllStocks(@RequestParam(defaultValue = "1") int page,
+                                                                @RequestParam(defaultValue = "") String category) {
         log.debug("REST request to get all Stocks, page: {}, category: {}", page, category);
-        Pageable pageable = PageRequest.of(page-1, 12);
+        Pageable pageable = PageRequest.of(page - 1, 12);
         if (category.isBlank()) {
             return ResponseEntity.ok(stockService.findAll(pageable));
         } else {
@@ -108,7 +121,8 @@ public class StockResource {
      * {@code GET  /stocks/:id} : get the "id" stock.
      *
      * @param id the id of the stock to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the stock, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the stock,
+     * or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/stocks/{id}")
     public ResponseEntity<ESProduct> getStock(@PathVariable Long id) {
@@ -118,7 +132,8 @@ public class StockResource {
     }
 
     @PostMapping("/stocks/check")
-    public ResponseEntity<List<ProductAvailabilityResponse>> checkStock(@Valid @RequestBody List<ProductAvailabilityRequest> requests) {
+    public ResponseEntity<List<ProductAvailabilityResponse>> checkStock(@Valid @RequestBody
+                                                                            List<ProductAvailabilityRequest> requests) {
         log.debug("REST request to check the availability of Products");
         List<ProductAvailabilityResponse> responses = stockService.getAvailabilityResponse(requests);
         return ResponseEntity.ok(responses);

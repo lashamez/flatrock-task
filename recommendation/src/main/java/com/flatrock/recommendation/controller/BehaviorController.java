@@ -6,15 +6,12 @@ import com.flatrock.recommendation.service.BehaviorService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/api")
@@ -31,7 +28,7 @@ public class BehaviorController {
     }
 
     @PostMapping("/behavior")
-    public ResponseEntity<Void> createBehavior(@Valid @RequestBody UserBehavior userBehavior) throws URISyntaxException {
+    public ResponseEntity<Void> createBehavior(@Valid @RequestBody UserBehavior userBehavior) {
         log.debug("REST request to save User behavior : {}", userBehavior);
         if (userBehavior.getId() != null) {
             throw new BadRequestAlertException("A new behavior cannot already have an ID", ENTITY_NAME, "idexists");

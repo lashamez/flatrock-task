@@ -8,12 +8,12 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@EnableConfigurationProperties({ AppProperties.class, LiquibaseProperties.class })
+@EnableConfigurationProperties({AppProperties.class, LiquibaseProperties.class})
 @ComponentScan(basePackages = {"com.flatrock.common.*", "com.flatrock.recommendation.*"})
 public class RecommendationApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(RecommendationApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(RecommendationApplication.class, args);
+    }
 
 }

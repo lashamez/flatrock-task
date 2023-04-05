@@ -17,7 +17,7 @@ import java.util.List;
 public class OrderCreatedEvent {
     private long orderId;
     private Long customerId;
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime timestamp;
     private List<OrderItemDto> items;
     private double totalPrice;

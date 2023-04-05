@@ -30,9 +30,9 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class AccountResource {
 
-    private static class AccountResourceException extends RuntimeException {
+    private static final class AccountResourceException extends RuntimeException {
 
-        private AccountResourceException(String message) {
+        private AccountResourceException(final String message) {
             super(message);
         }
     }
@@ -43,7 +43,7 @@ public class AccountResource {
 
     private final UserService userService;
 
-    public AccountResource(UserRepository userRepository, UserService userService) {
+    public AccountResource(final UserRepository userRepository, final UserService userService) {
         this.userRepository = userRepository;
         this.userService = userService;
     }
@@ -57,7 +57,7 @@ public class AccountResource {
      */
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerUser(@Valid @RequestBody ManagedUserVM managedUserVM) {
+    public void registerUser(@Valid @RequestBody final ManagedUserVM managedUserVM) {
         if (isPasswordLengthInvalid(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
@@ -71,7 +71,7 @@ public class AccountResource {
      * @return the login if the user is authenticated.
      */
     @GetMapping("/authenticate")
-    public String isAuthenticated(HttpServletRequest request) {
+    public String isAuthenticated(final HttpServletRequest request) {
         log.debug("REST request to check if the current user is authenticated");
         return request.getRemoteUser();
     }
@@ -98,7 +98,7 @@ public class AccountResource {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the user login wasn't found.
      */
     @PostMapping("/account")
-    public void updateUser(@Valid @RequestBody AdminUserDTO userDTO) {
+    public void updateUser(@Valid @RequestBody final AdminUserDTO userDTO) {
         String userLogin = SecurityUtils
             .getCurrentUserLogin()
             .orElseThrow(() -> new AccountResourceException("Current user login not found"));
@@ -117,11 +117,11 @@ public class AccountResource {
         );
     }
 
-    private static boolean isPasswordLengthInvalid(String password) {
+    private static boolean isPasswordLengthInvalid(final String password) {
         return (
-            StringUtils.isEmpty(password) ||
-            password.length() < ManagedUserVM.PASSWORD_MIN_LENGTH ||
-            password.length() > ManagedUserVM.PASSWORD_MAX_LENGTH
+            StringUtils.isEmpty(password)
+                    || password.length() < ManagedUserVM.PASSWORD_MIN_LENGTH
+                    || password.length() > ManagedUserVM.PASSWORD_MAX_LENGTH
         );
     }
 }

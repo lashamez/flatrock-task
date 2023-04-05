@@ -22,7 +22,8 @@ public class OrderCanceledListener {
 
     private final OrderReversalProducer reversalProducer;
 
-    public OrderCanceledListener(ObjectMapper objectMapper, OrderService orderService, OrderReversalProducer reversalProducer) {
+    public OrderCanceledListener(ObjectMapper objectMapper, OrderService orderService,
+                                 OrderReversalProducer reversalProducer) {
         this.objectMapper = objectMapper;
         this.orderService = orderService;
         this.reversalProducer = reversalProducer;
@@ -32,7 +33,7 @@ public class OrderCanceledListener {
     @KafkaListener(topics = "${application.topic.order-canceled}", groupId = "notification")
     public void listen(String json) throws JsonProcessingException {
         log.debug("Kafka received order-canceled notification :{}", json);
-        CanceledOrderEvent orderStatusEvent = objectMapper.readValue(json, new TypeReference<>() {});
+        CanceledOrderEvent orderStatusEvent = objectMapper.readValue(json, new TypeReference<>() { });
         Long orderId = orderStatusEvent.getOrderId();
         List<OrderItemDto> orderItems = orderService.findOrderItemsById(orderId);
         reversalProducer.send(orderItems);

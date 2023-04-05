@@ -1,7 +1,6 @@
 package com.flatrock.product.service;
 
 import com.flatrock.common.errors.BadRequestAlertException;
-import com.flatrock.product.domain.Product;
 import com.flatrock.product.domain.Review;
 import com.flatrock.product.repository.ReviewRepository;
 import org.springframework.stereotype.Service;

@@ -12,8 +12,8 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.elasticsearch.annotations.Document;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Entity
@@ -22,6 +22,7 @@ import java.io.Serializable;
 @Setter
 public class StockProduct implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -34,8 +35,8 @@ public class StockProduct implements Serializable {
     private Integer quantity;
 
 
-    @OneToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name="product_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id")
     private Product product;
 
 

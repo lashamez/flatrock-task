@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 
 import java.util.Map;
 
-public interface ParameterizedException{
+public interface ParameterizedException {
     HttpStatus getHttpStatus();
     Map<String, Object> getParameterMap();
 }

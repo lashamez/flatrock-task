@@ -1,9 +1,6 @@
 package com.flatrock.common.liquibase;
 
-
-import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.boot.autoconfigure.liquibase.DataSourceClosingSpringLiquibase;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 
@@ -17,7 +14,11 @@ public final class SpringLiquibaseUtil {
     private SpringLiquibaseUtil() {
     }
 
-    public static AsyncLiquibase createAsyncSpringLiquibase(Executor executor, DataSource liquibaseDatasource, LiquibaseProperties liquibaseProperties, DataSource dataSource, DataSourceProperties dataSourceProperties) {
+    public static AsyncLiquibase createAsyncSpringLiquibase(Executor executor,
+                                                            DataSource liquibaseDatasource,
+                                                            LiquibaseProperties liquibaseProperties,
+                                                            DataSource dataSource,
+                                                            DataSourceProperties dataSourceProperties) {
         AsyncLiquibase liquibase = new AsyncLiquibase(executor);
         DataSource liquibaseDataSource = getDataSource(liquibaseDatasource, liquibaseProperties, dataSource);
         if (liquibaseDataSource != null) {
@@ -30,7 +31,8 @@ public final class SpringLiquibaseUtil {
         return liquibase;
     }
 
-    private static DataSource getDataSource(DataSource liquibaseDataSource, LiquibaseProperties liquibaseProperties, DataSource dataSource) {
+    private static DataSource getDataSource(DataSource liquibaseDataSource, LiquibaseProperties liquibaseProperties,
+                                            DataSource dataSource) {
         if (liquibaseDataSource != null) {
             return liquibaseDataSource;
         } else {
@@ -38,7 +40,8 @@ public final class SpringLiquibaseUtil {
         }
     }
 
-    private static DataSource createNewDataSource(LiquibaseProperties liquibaseProperties, DataSourceProperties dataSourceProperties) {
+    private static DataSource createNewDataSource(LiquibaseProperties liquibaseProperties,
+                                                  DataSourceProperties dataSourceProperties) {
         Objects.requireNonNull(liquibaseProperties);
         Supplier<String> supplier = liquibaseProperties::getUrl;
         Objects.requireNonNull(dataSourceProperties);

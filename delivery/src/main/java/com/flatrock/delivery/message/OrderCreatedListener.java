@@ -29,7 +29,10 @@ public class OrderCreatedListener {
     private final OrderServiceClient request;
 
 
-    public OrderCreatedListener(ObjectMapper objectMapper, DeliveryRepository deliveryRepository, NotificationMessageSender notificationMessageSender, OrderServiceClient request) {
+    public OrderCreatedListener(ObjectMapper objectMapper,
+                                DeliveryRepository deliveryRepository,
+                                NotificationMessageSender notificationMessageSender,
+                                OrderServiceClient request) {
         this.objectMapper = objectMapper;
         this.deliveryRepository = deliveryRepository;
         this.notificationMessageSender = notificationMessageSender;
@@ -39,10 +42,11 @@ public class OrderCreatedListener {
     @KafkaListener(topics = "${application.topic.order-created}", groupId = "order")
     public void listen(String orderCreated) throws JsonProcessingException {
         log.debug("Kafka received order creation notification :{}", orderCreated);
-        OrderCreatedEvent orderCreatedEvent = objectMapper.readValue(orderCreated, new TypeReference<>() {});
-        Delivery delivery = deliveryRepository.save(new Delivery(orderCreatedEvent.getCustomerId(), orderCreatedEvent.getOrderId(), OrderStatus.PENDING));
-        notificationMessageSender.sendCustomerNotification(new OrderStatusEvent(delivery.getOrderId(), delivery.getCustomerId(),
-            delivery.getOrderStatus(), orderCreatedEvent.getTotalPrice()));
+        OrderCreatedEvent orderCreatedEvent = objectMapper.readValue(orderCreated, new TypeReference<>() { });
+        Delivery delivery = deliveryRepository.save(new Delivery(orderCreatedEvent.getCustomerId(),
+                orderCreatedEvent.getOrderId(), OrderStatus.PENDING));
+        notificationMessageSender.sendCustomerNotification(new OrderStatusEvent(delivery.getOrderId(),
+                delivery.getCustomerId(), delivery.getOrderStatus(), orderCreatedEvent.getTotalPrice()));
         OrderSellersData sellerData = request.getSellerData(orderCreatedEvent.getOrderId());
         sellerData.getSellerItems().forEach(seller -> {
             seller.setOrderStatus(delivery.getOrderStatus());

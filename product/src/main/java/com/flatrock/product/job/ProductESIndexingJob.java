@@ -1,11 +1,9 @@
 package com.flatrock.product.job;
 
 import com.flatrock.product.domain.ESProduct;
-import com.flatrock.product.domain.StockProduct;
 import com.flatrock.product.mapper.ProductMapper;
 import com.flatrock.product.repository.ProductESRepository;
 import com.flatrock.product.repository.StockRepository;
-import com.flatrock.product.service.StockService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;

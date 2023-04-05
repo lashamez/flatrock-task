@@ -2,8 +2,6 @@ package com.flatrock.product.config;
 
 import com.flatrock.common.liquibase.SpringLiquibaseUtil;
 import liquibase.integration.spring.SpringLiquibase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -11,17 +9,14 @@ import org.springframework.boot.autoconfigure.liquibase.LiquibaseDataSource;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 
 import javax.sql.DataSource;
 import java.util.concurrent.Executor;
 
 @Configuration
 public class LiquibaseConfiguration {
-    private final Environment env;
 
-    public LiquibaseConfiguration(Environment env) {
-        this.env = env;
+    public LiquibaseConfiguration() {
     }
 
     @Bean

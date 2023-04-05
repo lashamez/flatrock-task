@@ -2,13 +2,19 @@ package com.flatrock.recommendation.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.flatrock.common.model.BehaviorType;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -37,8 +43,12 @@ public class UserBehavior {
     private LocalDateTime timestamp;
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+            return false;
+        }
         UserBehavior behavior = (UserBehavior) o;
         return id != null && Objects.equals(id, behavior.id);
     }

@@ -13,8 +13,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.Hibernate;
 
+import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name = "delivery")
@@ -23,6 +26,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class Delivery implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public Delivery(Long customerId, Long orderId, OrderStatus orderStatus) {
@@ -52,4 +56,15 @@ public class Delivery implements Serializable {
         return getClass().hashCode();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+            return false;
+        }
+        Delivery delivery = (Delivery) o;
+        return id != null && Objects.equals(id, delivery.id);
+    }
 }

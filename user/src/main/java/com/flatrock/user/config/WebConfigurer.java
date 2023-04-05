@@ -1,8 +1,6 @@
 package com.flatrock.user.config;
 
-import com.flatrock.common.application.AppProperties;
 import jakarta.servlet.ServletContext;
-import jakarta.servlet.ServletException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.ServletContextInitializer;

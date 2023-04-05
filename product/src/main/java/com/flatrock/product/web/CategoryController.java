@@ -43,7 +43,8 @@ public class CategoryController {
      * {@code GET  /categories/:id} : get the "id" category.
      *
      * @param id the id of the category.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the category, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the category,
+     * or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/categories/{id}")
     public ResponseEntity<Category> getCategory(@PathVariable Long id) {

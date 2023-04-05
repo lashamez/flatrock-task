@@ -27,10 +27,12 @@ public class AsyncLiquibase extends DataSourceClosingSpringLiquibase {
             try {
                 this.executor.execute(() -> {
                     try {
-                        this.logger.warn("Starting Liquibase asynchronously, your database might not be ready at startup!");
+                        this.logger.warn("Starting Liquibase asynchronously, "
+                                + "your database might not be ready at startup!");
                         this.initDb();
                     } catch (LiquibaseException ex) {
-                        this.logger.error("Liquibase could not start correctly, your database is NOT ready: {}", ex.getMessage(), ex);
+                        this.logger.error("Liquibase could not start correctly, your database is NOT ready: {}",
+                                ex.getMessage(), ex);
                     }
 
                 });
@@ -45,7 +47,8 @@ public class AsyncLiquibase extends DataSourceClosingSpringLiquibase {
 
             connection.close();
         } catch (SQLException ex) {
-            this.logger.error("Liquibase could not start correctly, your database is NOT ready: {}", ex.getMessage(), ex);
+            this.logger.error("Liquibase could not start correctly, your database is NOT ready: {}",
+                    ex.getMessage(), ex);
         }
 
     }

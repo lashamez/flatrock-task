@@ -26,7 +26,9 @@ public class OrderCreatedListener {
     @Value("${application.topic.reserve-failed}")
     private String reserveFailedTopic;
 
-    public OrderCreatedListener(ObjectMapper objectMapper, StockService stockService, KafkaTemplate<Object, Long> kafkaTemplate) {
+    public OrderCreatedListener(ObjectMapper objectMapper,
+                                StockService stockService,
+                                KafkaTemplate<Object, Long> kafkaTemplate) {
         this.objectMapper = objectMapper;
         this.stockService = stockService;
         this.kafkaTemplate = kafkaTemplate;
@@ -37,11 +39,11 @@ public class OrderCreatedListener {
     public void listen(String orderCreated) throws JsonProcessingException {
         log.debug("Kafka received order creation notification :{}", orderCreated);
         log.debug("Updating reserved product quantities");
-        OrderCreatedEvent orderCreatedEvent = objectMapper.readValue(orderCreated, new TypeReference<>() {});
+        OrderCreatedEvent orderCreatedEvent = objectMapper.readValue(orderCreated, new TypeReference<>() { });
 
         try {
             stockService.reduceQuantities(orderCreatedEvent.getItems());
-        }catch (Exception e) {
+        } catch (Exception e) {
             kafkaTemplate.send(reserveFailedTopic, orderCreatedEvent.getOrderId());
         }
     }

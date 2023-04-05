@@ -1,7 +1,12 @@
 package com.flatrock.product.service;
 
 import com.flatrock.common.errors.BadRequestAlertException;
-import com.flatrock.common.model.*;
+import com.flatrock.common.model.OrderItemDto;
+import com.flatrock.common.model.OrderSellersData;
+import com.flatrock.common.model.PageResponse;
+import com.flatrock.common.model.ProductAvailabilityRequest;
+import com.flatrock.common.model.ProductAvailabilityResponse;
+import com.flatrock.common.model.SellerItemData;
 import com.flatrock.product.domain.ESProduct;
 import com.flatrock.product.mapper.ProductMapper;
 import com.flatrock.product.repository.ProductESRepository;
@@ -111,16 +116,17 @@ public class StockService {
         if (requests.size() != stockProducts.size()) {
             throw new BadRequestAlertException("Incorrect productIds", "product", "invalidproduct");
         }
-        requests.forEach(entry->{
+        requests.forEach(entry -> {
             //since requests.size() = stockProducts.size() Optional.get() is safe.
             StockProduct stockProduct = stockProducts.stream()
                 .filter(stock -> stock.getProduct().getId() == entry.getProductId())
                 .findFirst().get();
             if (stockProduct.getQuantity() >= entry.getQuantity()) {
                 Product product = stockProduct.getProduct();
-                responses.add(new ProductAvailabilityResponse(entry.getProductId(),true, product.getPrice() * entry.getQuantity()));
+                responses.add(new ProductAvailabilityResponse(entry.getProductId(), true,
+                        product.getPrice() * entry.getQuantity()));
             } else {
-                responses.add(new ProductAvailabilityResponse(entry.getProductId(),false, null));
+                responses.add(new ProductAvailabilityResponse(entry.getProductId(), false, null));
             }
         });
         return responses;
@@ -138,7 +144,8 @@ public class StockService {
 
 
     public OrderSellersData getSellersData(List<OrderItemDto> orderItems) {
-        List<StockProduct> stockProducts = stockRepository.findByProductIds(orderItems.stream().map(OrderItemDto::getProductId).toList());
+        List<StockProduct> stockProducts = stockRepository.findByProductIds(orderItems.stream()
+                .map(OrderItemDto::getProductId).toList());
         OrderSellersData sellerItemData = new OrderSellersData();
         Map<Long, List<StockProduct>> sellerProducts = new HashMap<>();
         stockProducts.forEach(stock -> sellerProducts.computeIfAbsent(stock.getProduct().getSellerId(),

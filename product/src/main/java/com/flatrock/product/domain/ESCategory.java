@@ -1,6 +1,11 @@
 package com.flatrock.product.domain;
 
-import lombok.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -8,6 +13,6 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class ESCategory {
-    String name;
-    Long count;
+    private String name;
+    private Long count;
 }

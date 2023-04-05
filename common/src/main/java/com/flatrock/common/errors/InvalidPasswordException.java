@@ -2,12 +2,14 @@ package com.flatrock.common.errors;
 
 import org.springframework.http.HttpStatus;
 
+import java.io.Serial;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-public class InvalidPasswordException extends ResponseException implements ParameterizedException{
+public class InvalidPasswordException extends ResponseException implements ParameterizedException {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public InvalidPasswordException() {
@@ -24,7 +26,7 @@ public class InvalidPasswordException extends ResponseException implements Param
     public Map<String, Object> getParameterMap() {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("timestamp", LocalDateTime.now());
-        parameters.put("message", getMessage() );
+        parameters.put("message", getMessage());
         parameters.put("params", "user");
         parameters.put("status", HttpStatus.BAD_REQUEST);
         return parameters;
